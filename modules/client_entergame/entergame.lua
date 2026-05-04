@@ -2,6 +2,8 @@ EnterGame = {}
 local loadBox, enterGame, enterGameButton, logpass, clientBox, protocolLogin, server = nil
 local versionsFound = false
 local serverSelector, serverHostTextEdit, rememberPasswordBox = nil
+local motdWindow = nil
+local motdEnabled = true
 local protos = {
 	"740",
 	"760",
@@ -39,6 +41,25 @@ local function onSessionKey(protocol, sessionKey)
 	G.sessionKey = sessionKey
 end
 
+local function onMotd(protocol, motd)
+	if type(motd) ~= "string" or #motd == 0 then
+		G.motdNumber = nil
+		G.motdMessage = nil
+
+		return
+	end
+
+	local separator = motd:find("\n", 1, true)
+
+	if separator then
+		G.motdNumber = tonumber(motd:sub(1, separator - 1))
+		G.motdMessage = motd:sub(separator + 1)
+	else
+		G.motdNumber = tonumber(motd)
+		G.motdMessage = motd
+	end
+end
+
 local function onCharacterList(protocol, characters, account, otui)
 	if rememberPasswordBox:isChecked() then
 		local account = g_crypt.encrypt(G.account)
@@ -64,6 +85,25 @@ local function onCharacterList(protocol, characters, account, otui)
 
 	CharacterList.create(characters, account, otui)
 	CharacterList.show()
+
+	if motdEnabled then
+		local lastMotdNumber = g_settings.getNumber("motd")
+
+		if G.motdNumber and G.motdNumber ~= lastMotdNumber and G.motdMessage and #G.motdMessage > 0 then
+			g_settings.set("motd", G.motdNumber)
+			motdWindow = displayInfoBox(tr("Message of the day"), G.motdMessage)
+
+			connect(motdWindow, {
+				onOk = function ()
+					CharacterList.show()
+					motdWindow = nil
+				end
+			})
+
+			CharacterList.hide()
+		end
+	end
+
 	g_settings.save()
 end
 
@@ -379,6 +419,12 @@ function EnterGame.terminate()
 		protocolLogin = nil
 	end
 
+	if motdWindow then
+		motdWindow:destroy()
+
+		motdWindow = nil
+	end
+
 	EnterGame = nil
 end
 
@@ -518,6 +564,7 @@ function EnterGame.doLogin(account, password, token, host)
 	protocolLogin.onCharacterList = onCharacterList
 	protocolLogin.onUpdateNeeded = onUpdateNeeded
 	protocolLogin.onProxyList = onProxyList
+	protocolLogin.onMotd = onMotd
 
 	EnterGame.hide()
 
@@ -629,4 +676,17 @@ function EnterGame.onLoginError(err)
 	if err:lower():find("invalid") or err:lower():find("not correct") or err:lower():find("or password") then
 		EnterGame.clearAccountFields()
 	end
+end
+
+function EnterGame.displayMotd()
+	if not motdWindow and G.motdMessage and #G.motdMessage > 0 then
+		motdWindow = displayInfoBox(tr("Message of the day"), G.motdMessage)
+		motdWindow.onOk = function ()
+			motdWindow = nil
+		end
+	end
+end
+
+function EnterGame.disableMotd()
+	motdEnabled = false
 end
