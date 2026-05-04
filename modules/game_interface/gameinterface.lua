@@ -1207,7 +1207,7 @@ function getTopBar()
 end
 
 function refreshViewMode()
-	local classic = true
+	local classic = g_settings.getBoolean("classicView") and not g_app.isMobile()
 	local rightPanels = g_settings.getNumber("rightPanels") - gameRightPanels:getChildCount()
 	local leftPanels = g_settings.getNumber("leftPanels") - 1 - gameLeftPanels:getChildCount()
 
@@ -1348,7 +1348,7 @@ function updateSize()
 		return
 	end
 
-	local classic = true
+	local classic = g_settings.getBoolean("classicView") and not g_app.isMobile()
 	local height = gameMapPanel:getHeight()
 	local width = gameMapPanel:getWidth()
 

@@ -141,8 +141,8 @@ OptionPanel
     margin-top: 8
 
     OptionCheckBox
-      id: classicView
-      !text: tr('Classic view')
+      id: mapView
+      !text: tr('Map view')
       anchors.left: parent.left
       anchors.right: parent.right
       anchors.top: parent.top

@@ -25,8 +25,8 @@ OptionPanel
       end
 
   OptionCheckBox
-    id: classicView
-    !text: tr('Classic view')
+    id: mapView
+    !text: tr('Map view')
     margin-top: 5
     visible: false
     

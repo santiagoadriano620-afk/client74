@@ -269,7 +269,39 @@ function toggleOption(key)
 	setOption(key, not getOption(key))
 end
 
+local function resolveOptionKeyValue(key, value)
+	if key == "mapView" then
+		return "classicView", not value
+	end
+
+	return key, value
+end
+
+local function syncOptionWidget(widget, value)
+	if widget:getStyle().__class == "UICheckBox" then
+		widget:setChecked(value)
+	elseif widget:getStyle().__class == "UIScrollBar" then
+		widget:setValue(value)
+	elseif widget:getStyle().__class == "UIComboBox" then
+		if type(value) == "string" then
+			widget:setCurrentOption(value, true)
+		else
+			if value == nil or value < 1 then
+				value = 1
+			end
+
+			if widget.currentIndex ~= value then
+				widget:setCurrentIndex(value, true)
+			end
+		end
+	end
+end
+
 function setOption(key, value, force)
+	local requestedKey = key
+	local requestedValue = value
+	key, value = resolveOptionKeyValue(key, value)
+
 	if extraOptions[key] ~= nil then
 		g_extras.set(key, value)
 		g_settings.set("extras_" .. key, value)
@@ -394,22 +426,14 @@ function setOption(key, value, force)
 		local widget = win:recursiveGetChildById(key)
 
 		if widget then
-			if widget:getStyle().__class == "UICheckBox" then
-				widget:setChecked(value)
-			elseif widget:getStyle().__class == "UIScrollBar" then
-				widget:setValue(value)
-			elseif widget:getStyle().__class == "UIComboBox" then
-				if type(value) == "string" then
-					widget:setCurrentOption(value, true)
-				else
-					if value == nil or value < 1 then
-						value = 1
-					end
+			syncOptionWidget(widget, value)
+		end
 
-					if widget.currentIndex ~= value then
-						widget:setCurrentIndex(value, true)
-					end
-				end
+		if requestedKey ~= key then
+			local requestedWidget = win:recursiveGetChildById(requestedKey)
+
+			if requestedWidget then
+				syncOptionWidget(requestedWidget, requestedValue)
 			end
 		end
 	end
@@ -432,6 +456,10 @@ function setOption(key, value, force)
 end
 
 function getOption(key)
+	if key == "mapView" then
+		return not options.classicView
+	end
+
 	return options[key]
 end
 
