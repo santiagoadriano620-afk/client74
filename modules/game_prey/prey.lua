@@ -218,6 +218,7 @@ end
 local function parseSlot(msg)
 	local slot = {
 		state = msg:getU8(),
+		timeUntilFreeReroll = msg:getU32(),
 		monster = "",
 		outfit = nil,
 		bonusType = PREY_BONUS_NONE,
@@ -259,6 +260,14 @@ local function updateWildcardBalance(wildcards)
 	end
 end
 
+local function setRerollPriceLabel(priceWidget, isFree)
+	if isFree then
+		priceWidget:setText("Free")
+	else
+		priceWidget:setText(comma_value(rerollPrice))
+	end
+end
+
 local function renderEmptySlot(slot)
 	onPreyInactive(slot, 0)
 	local prey = preyWindow["slot" .. slot + 1]
@@ -274,8 +283,8 @@ local function renderEmptySlot(slot)
 	end
 end
 
-local function renderBonusSelection(slot, monsterName, outfit)
-	onPreyInactive(slot, 0, monsterName, outfit)
+local function renderBonusSelection(slot, monsterName, outfit, timeUntilFreeReroll)
+	onPreyInactive(slot, timeUntilFreeReroll or 0, monsterName, outfit)
 	local prey = preyWindow["slot" .. slot + 1]
 	if not prey then
 		return
@@ -295,13 +304,13 @@ function renderPreySlot(slot)
 	if not data or data.state == PREY_STATE_EMPTY then
 		renderEmptySlot(slot)
 	elseif data.state == PREY_STATE_LIST_SELECTION then
-		onPreySelection(slot, PREY_BONUS_NONE, 0, 0, data.names or {}, data.outfits or {}, 0)
+		onPreySelection(slot, PREY_BONUS_NONE, 0, 0, data.names or {}, data.outfits or {}, data.timeUntilFreeReroll or 0)
 	elseif data.state == PREY_STATE_BONUS_SELECTION then
-		renderBonusSelection(slot, data.monster or "", data.outfit)
+		renderBonusSelection(slot, data.monster or "", data.outfit, data.timeUntilFreeReroll or 0)
 	elseif data.state == PREY_STATE_ACTIVE then
-		onPreyActive(slot, data.monster or "", data.outfit, data.bonusType, data.bonusValue, bonusValueToGrade(data.bonusValue), data.timeLeft or 0, 0, data.flags or 0)
+		onPreyActive(slot, data.monster or "", data.outfit, data.bonusType, data.bonusValue, bonusValueToGrade(data.bonusValue), data.timeLeft or 0, data.timeUntilFreeReroll or 0, data.flags or 0)
 	elseif data.state == PREY_STATE_INACTIVE then
-		onPreyInactive(slot, 0, data.monster, data.outfit)
+		onPreyInactive(slot, data.timeUntilFreeReroll or 0, data.monster, data.outfit)
 		local prey = preyWindow["slot" .. slot + 1]
 		if prey then
 			local title = data.monster and data.monster ~= "" and data.monster or "Inactive"
@@ -330,12 +339,14 @@ local function parsePreyMessage(msg)
 
 	if subtype == PREY_SEND_FULL then
 		updateWildcardBalance(msg:getU8())
+		onPreyPrice(msg:getU32())
 		for slot = 0, 2 do
 			preySlots[slot] = parseSlot(msg)
 		end
 		renderAllSlots()
 	elseif subtype == PREY_SEND_UPDATE then
 		updateWildcardBalance(msg:getU8())
+		onPreyPrice(msg:getU32())
 		local slot = msg:getU8()
 		preySlots[slot] = parseSlot(msg)
 		renderPreySlot(slot)
@@ -501,7 +512,7 @@ function onPreyFreeRolls(slot, timeleft)
 		progressBar:setText(desc)
 
 		if timeleft == 0 then
-			price:setText("0")
+			setRerollPriceLabel(price, true)
 		end
 	end
 end
@@ -564,9 +575,9 @@ function onPreyPrice(price)
 			local progressBar = state.reroll.button.time
 
 			if progressBar:getText() ~= "Free" then
-				price:setText(comma_value(rerollPrice))
+				setRerollPriceLabel(price, false)
 			else
-				price:setText("0")
+				setRerollPriceLabel(price, true)
 				progressBar:setPercent(0)
 			end
 		end
@@ -594,11 +605,7 @@ function setTimeUntilFreeReroll(slot, timeUntilFreeReroll)
 
 		local price = panel.reroll.price.text
 
-		if timeUntilFreeReroll > 0 then
-			price:setText(comma_value(rerollPrice))
-		else
-			price:setText("Free")
-		end
+		setRerollPriceLabel(price, timeUntilFreeReroll <= 0)
 	end
 end
 
