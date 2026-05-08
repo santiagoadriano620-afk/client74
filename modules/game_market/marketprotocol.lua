@@ -269,7 +269,37 @@ local function parseCustomMarketMessage(protocol, msg)
 		return true
 	elseif response == CustomMarketResponse.Detail then
 		local itemId = msg:getU16()
-		signalcall(Market.onMarketDetail, itemId, {}, {}, {})
+		local descriptions = {}
+		local descriptionCount = msg:getU8()
+
+		for i = 1, descriptionCount do
+			table.insert(descriptions, {
+				msg:getU8(),
+				msg:getString()
+			})
+		end
+
+		local function readStatistics(action)
+			local stats = {}
+			local count = msg:getU8()
+
+			for i = 1, count do
+				local timestamp = msg:getU32()
+				local transactions = msg:getU32()
+				local totalPrice = msg:getU32()
+				local highestPrice = msg:getU32()
+				local lowestPrice = msg:getU32()
+
+				table.insert(stats, OfferStatistic.new(timestamp, action, transactions, totalPrice, highestPrice, lowestPrice))
+			end
+
+			return stats
+		end
+
+		local purchaseStats = readStatistics(MarketAction.Buy)
+		local saleStats = readStatistics(MarketAction.Sell)
+
+		signalcall(Market.onMarketDetail, itemId, descriptions, purchaseStats, saleStats)
 		return true
 	end
 

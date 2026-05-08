@@ -467,9 +467,10 @@ local function updateDetails(itemId, descriptions, purchaseStats, saleStats)
 	detailsTable:clearData()
 
 	for k, desc in pairs(descriptions) do
+		local descriptionName = getMarketDescriptionName(desc[1]) or ("Attribute " .. desc[1])
 		local columns = {
 			{
-				text = getMarketDescriptionName(desc[1]) .. ":"
+				text = descriptionName .. ":"
 			},
 			{
 				text = desc[2]
@@ -521,7 +522,7 @@ local function updateDetails(itemId, descriptions, purchaseStats, saleStats)
 
 		sellStatsTable:addRow({
 			{
-				text = "Total Transations:"
+				text = "Total Transactions:"
 			},
 			{
 				text = transactions
@@ -600,7 +601,7 @@ local function updateDetails(itemId, descriptions, purchaseStats, saleStats)
 
 		buyStatsTable:addRow({
 			{
-				text = "Total Transations:"
+				text = "Total Transactions:"
 			},
 			{
 				text = transactions
@@ -1160,8 +1161,8 @@ local function initInterface()
 		270
 	})
 	detailsTable:setColumnWidth({
-		80,
-		330
+		120,
+		290
 	})
 	buyOfferTable:setSorting(4, TABLE_SORTING_DESC)
 	sellOfferTable:setSorting(4, TABLE_SORTING_ASC)
