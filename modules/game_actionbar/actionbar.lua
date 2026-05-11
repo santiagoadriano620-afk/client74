@@ -1409,6 +1409,11 @@ function save()
 		return g_logger.error("Something went wrong, file is above 100MB, won't be saved")
 	end
 
+	local directory = settingsFile:match("^(.+)/[^/]+$") or "/settings/"
+	if not g_resources.directoryExists(directory) then
+		g_resources.makeDir(directory)
+	end
+
 	g_resources.writeFileContents(settingsFile, result)
 end
 
