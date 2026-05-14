@@ -1,19 +1,7 @@
-FlatPanel < UIWidget
-  phantom: true
-  auto-focus: first
-  image-source: /images/modern_ui/panel
-  image-border: 3
-
 RoundButton < UIWidget
   anchors.top: parent.top
   anchors.left: parent.left
   image-source: /images/modern_ui/round
-
-LightFlatPanel < UIWidget
-  phantom: true
-  auto-focus: first
-  image-source: /images/modern_ui/panel_container
-  image-border: 3
 
 SpecialLabel < UIButton
   font: verdana-11px-antialised

@@ -256,21 +256,17 @@ function popWindow()
 		terminalWindow:breakAnchors()
 		terminalWindow:setOn(true)
 
-		if not oldSize then
-			local size = {
-				width = g_window.getWidth() / 2.5,
-				height = g_window.getHeight() / 4
-			}
-		end
+		local size = oldSize or {
+			width = g_window.getWidth() / 2.5,
+			height = g_window.getHeight() / 4
+		}
 
 		terminalWindow:setSize(size)
 
-		if not oldPos then
-			local pos = {
-				x = 0,
-				y = g_window.getHeight()
-			}
-		end
+		local pos = oldPos or {
+			x = 0,
+			y = g_window.getHeight()
+		}
 
 		terminalWindow:setPosition(pos)
 		terminalWindow:getChildById("bottomResizeBorder"):enable()

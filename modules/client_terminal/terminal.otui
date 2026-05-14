@@ -24,6 +24,7 @@ UIWindow
   clipping: true
   anchors.fill: parent
   border: 0 white
+  @onClose: modules.client_terminal.hide()
   $on:
     border: 1 black
 
