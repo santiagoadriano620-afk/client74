@@ -1,5 +1,5 @@
 NonClosableMiniWindow
-  height: 80
+  height: 103
   id: sideButtonsWindow
   @onClose: modules.game_sidebuttons.onMiniWindowClose()
   &save: true
@@ -10,7 +10,7 @@ NonClosableMiniWindow
       id: verticalSeparator
       anchors.top: skillsButton.top
       anchors.left: spellsButton.right
-      anchors.bottom: preyTrackerButton.bottom
+      anchors.bottom: forgeButton.bottom
       margin-left: 12
 
     UIWidget
@@ -191,6 +191,23 @@ NonClosableMiniWindow
 
       $checked:
         image-clip: 0 20 20 20
+
+    UIWidget
+      id: forgeButton
+      image-source: /modules/game_forge/images/icon-fusion
+      anchors.left: parent.left
+      anchors.top: botButton.bottom
+      margin-left: 5
+      margin-top: 3
+      size: 20 20
+      tooltip: Exaltation Forge
+      @onClick: if modules.game_forge then modules.game_forge.toggle() end
+
+      $pressed:
+        image-color: #bbbbbb
+
+      $checked:
+        image-color: #bbbbbb
 
     UIWidget
       id: fullButtons

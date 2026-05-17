@@ -42,6 +42,7 @@ Module
     - game_market
     - game_supplystash
     - game_ciclopedia
+    - game_forge
     - game_interface_postload
   @onLoad: init()
   @onUnload: terminate()

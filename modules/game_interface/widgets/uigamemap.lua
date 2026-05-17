@@ -40,8 +40,17 @@ function UIGameMap:markThing(thing, color)
 	end
 end
 
+local function isExaltationForgeThing(thing)
+  if not thing or not thing:isItem() then
+    return false
+  end
+
+  local itemId = thing:getId()
+  return itemId >= 37115 and itemId <= 37159
+end
+
 function UIGameMap:onDragEnter(mousePos)
-	local tile = self:getTile(mousePos)
+  local tile = self:getTile(mousePos)
 
 	if not tile then
 		return false
@@ -174,11 +183,14 @@ function UIGameMap:onMouseRelease(mousePosition, mouseButton)
 	local lookThing, useThing, creatureThing, multiUseThing, attackCreature = nil
 	local tile = self:getTile(mousePosition)
 
-	if tile then
-		lookThing = tile:getTopLookThingEx(positionOffset)
-		useThing = tile:getTopUseThing()
-		creatureThing = tile:getTopCreatureEx(positionOffset)
-	end
+  if tile then
+    lookThing = tile:getTopLookThingEx(positionOffset)
+    useThing = tile:getTopUseThing()
+    if not useThing and isExaltationForgeThing(lookThing) then
+      useThing = lookThing
+    end
+    creatureThing = tile:getTopCreatureEx(positionOffset)
+  end
 
 	local autoWalkTile = g_map.getTile(autoWalkPos)
 

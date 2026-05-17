@@ -7,6 +7,7 @@ botButton = nil
 expHourButton = nil
 preyButton = nil
 preyTrackerButton = nil
+forgeButton = nil
 spellsButton = nil
 ciclopediaButton = nil
 unjustifiedPointsButton = nil
@@ -30,6 +31,7 @@ function init()
 	expHourButton = buttonsWindow:recursiveGetChildById("exphButton")
 	preyButton = buttonsWindow:recursiveGetChildById("preyButton")
 	preyTrackerButton = buttonsWindow:recursiveGetChildById("preyTrackerButton")
+	forgeButton = buttonsWindow:recursiveGetChildById("forgeButton")
 	spellsButton = buttonsWindow:recursiveGetChildById("spellsButton")
 	ciclopediaButton = buttonsWindow:recursiveGetChildById("ciclopediaButton")
 	unjustifiedPointsButton = buttonsWindow:recursiveGetChildById("unjustifiedPointsButton")
@@ -71,6 +73,7 @@ function hideButtons()
 		expHourButton,
 		preyButton,
 		preyTrackerButton,
+		forgeButton,
 		optionsButton,
 		logoutButton,
 		verticalSeparator
@@ -95,6 +98,7 @@ function showButtons()
 		expHourButton,
 		preyButton,
 		preyTrackerButton,
+		forgeButton,
 		optionsButton,
 		logoutButton,
 		verticalSeparator
@@ -103,7 +107,7 @@ function showButtons()
 	if fullButtons then
 		fullButtons:setChecked(true)
 	end
-	buttonsWindow:setHeight(80)
+	buttonsWindow:setHeight(103)
 end
 
 function toggle()

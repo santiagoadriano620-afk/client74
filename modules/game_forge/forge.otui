@@ -1,0 +1,2324 @@
+FusionItemBox < UICheckBox
+  border-width: 0
+
+  $checked:
+    border-width: 1
+    border-color: #ffffff
+
+  UIWidget
+    size: 34 34
+    image-source: /images/ui/item
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-left: 1
+    margin-top: 1
+    phantom: true
+
+  UIItem
+    id: item
+    size: 32 32
+    phantom: true
+    virtual: true
+    virtual-count: true
+    show-count: false
+    priceable: true
+    margin-top: 2
+    anchors.top: parent.top
+    anchors.horizontalCenter: parent.horizontalCenter
+
+  Label
+    id: count
+    visible: false
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    margin-right: 2
+    margin-bottom: 0
+    width: 24
+    height: 12
+    text-align: right
+    color: #ffffff
+    font: verdana-11px-antialised
+
+HistoryForgePanel < UIWidget
+  size: 452 20
+  UIWidget
+    id: date
+    width: 145
+    anchors.top: parent.top
+    anchors.left: parent.left
+    text-align: left
+    margin-left: 5
+    margin-top: 1
+    font: verdana-11px-antialised
+  UIWidget
+    id: action
+    width: 88
+    anchors.top: parent.top
+    anchors.left: prev.right
+    text-align: left
+    margin-top: 1
+    font: verdana-11px-antialised
+  UIWidget
+    id: details
+    width: 205
+    anchors.top: parent.top
+    anchors.left: prev.right
+    text-align: left
+    margin-top: 1
+    font: verdana-11px-antialised
+
+MainWindow
+  id: forgeWindow
+  !text: tr('Exaltation Forge')
+  anchors.horizontalCenter: parent.horizontalCenter
+  size: 500 436
+  @onEscape: modules.game_forge.offlineForge()
+
+  FlatPanel
+    id: panelButtons
+    size: 468 36
+    image-source: /images/ui/back-icons
+    image-border: 1
+    anchors.top: parent.top
+    anchors.left: parent.left
+    margin-left: 0
+    margin-top: 7
+
+    Button
+      id: fusionButton
+      anchors.top: parent.top
+      anchors.left: parent.left
+      size: 116 34
+      margin-left: 1
+      margin-top: 1
+      image-source: /images/game/forge/fusionButton
+      image-clip: 0 0 116 34
+      $hover !checked:
+        image-clip: 0 0 116 34
+      $pressed:
+        image-clip: 0 34 116 34
+      $checked:
+        image-clip: 0 34 116 34
+      @onClick: loadMenu('fusionPanel')
+    Button
+      id: transferButton
+      anchors.top: parent.top
+      anchors.left: prev.right
+      size: 116 34
+      margin-left: 1
+      margin-top: 1
+      image-source: /images/game/forge/transferButton
+      image-clip: 0 0 116 34
+      $hover !checked:
+        image-clip: 0 0 116 34
+      $pressed:
+        image-clip: 0 34 116 34
+      $checked:
+        image-clip: 0 34 116 34
+      @onClick: loadMenu('transferPanel')
+    Button
+      id: conversionButton
+      anchors.top: parent.top
+      anchors.left: prev.right
+      size: 116 34
+      margin-left: 1
+      margin-top: 1
+      image-source: /images/game/forge/conversionButton
+      image-clip: 0 0 116 34
+      $hover !checked:
+        image-clip: 0 0 116 34
+      $pressed:
+        image-clip: 0 34 116 34
+      $checked:
+        image-clip: 0 34 116 34
+      @onClick: loadMenu('conversionPanel')
+    Button
+      id: historyButton
+      anchors.top: parent.top
+      anchors.left: prev.right
+      size: 118 34
+      margin-left: 1
+      margin-top: 1
+      image-source: /images/game/forge/historyButton
+      image-clip: 0 0 116 34
+      $hover !checked:
+        image-clip: 0 0 116 34
+      $pressed:
+        image-clip: 0 34 116 34
+      $checked:
+        image-clip: 0 34 116 34
+      @onClick: loadMenu('historyPanel')
+
+  Panel
+    id: contentPanel
+    anchors.bottom: parent.bottom
+    anchors.top: prev.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin: 5 11 49 12
+
+    Panel
+      id: fusionPanel
+      anchors.fill: parent
+      visible: false
+      Panel
+        id: itemFusionPanel
+        size: 469 112
+        anchors.left: parent.left
+        anchors.top: parent.top
+        margin-left: -10
+        image-source: /images/ui/t2pixel-up-frame-borderimage
+        image-border: 30
+        Label
+          anchors.horizontalCenter: parent.horizontalCenter
+          anchors.top: parent.top
+          !text: tr('Select Item For Fusion')
+          color: #909090
+          margin-top: 2
+
+        TextList
+          id: itemsPanel
+          size: 165 82
+          anchors.left: parent.left
+          anchors.top: prev.bottom
+          vertical-scrollbar: itemsPanelListScrollBar
+          margin-top: 8
+          margin-left: 7
+          padding-top: 3
+          padding-left: 3
+          layout:
+            type: grid
+            cell-size: 36 36
+            num-columns: 4
+            cell-spacing: 1
+
+        VerticalScrollBar
+          id: itemsPanelListScrollBar
+          anchors.top: prev.top
+          anchors.bottom: prev.bottom
+          anchors.right: prev.right
+          margin-right: 1
+          margin-top: 1
+          margin-bottom: 1
+          step: 24
+          pixels-scroll: true
+
+        Panel
+          id: mindPanel
+          size: 166 80
+          anchors.top: itemsPanel.top
+          anchors.left: prev.right
+          margin-top: 2
+          margin-left: 1
+          UIWidget
+            size: 15 25
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            image-source: /images/arrows/icon-arrow-rightlarge
+            margin-top: -11
+            margin-left: 37
+          UIWidget
+            size: 15 25
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: prev.right
+            image-source: /images/arrows/icon-arrow-rightlarge
+            margin-top: -11
+            margin-left: 5
+          UIWidget
+            size: 15 25
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: prev.right
+            image-source: /images/arrows/icon-arrow-rightlarge
+            margin-top: -11
+            margin-left: 5
+
+          CheckBox
+            id: convergenceCheckBox
+            size: 12 12
+            !text: tr('Convergence')
+            font: verdana-11px-antialised
+            text-auto-resize: true
+            color: #FFFFFF
+            text-offset: 14 -2
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            margin-left: 11
+            image-source: /images/ui/checkbox
+            image-clip: 0 0 12 12
+            @onCheckChange: modules.game_forge.onConvergenceFusionChange(self, self:isChecked())
+
+        Panel
+          id: nextItemPanel
+          size: 65 65
+          anchors.top: prev.top
+          anchors.left: prev.right
+          margin-top: 10
+          margin-left: 10
+          UIItem
+            id: nextItem
+            size: 65 65
+            shader: item_black
+            draggable: false
+            UIWidget
+              id: tierflags
+              visible: false
+              size: 18 16
+              image-source: /images/game/items/tiers-strip-big
+              image-clip: 0 0 18 16
+              anchors.top: parent.top
+              anchors.right: parent.right
+              margin-top: 1
+            UIWidget
+              id: questionMark
+              size: 8 21
+              anchors.horizontalCenter: parent.horizontalCenter
+              anchors.top: parent.top
+              margin-top: 17
+              image-source: /images/ui/icon-questionmark
+              visible: true
+
+      Panel
+        id: itemsFusion
+        size: 469 117
+        anchors.left: parent.left
+        anchors.top: prev.bottom
+        image-source: /images/ui/t2pixel-up-frame-borderimage
+        image-border: 30
+        margin-top: 5
+        margin-left: -10
+        visible: true
+        Label
+          anchors.horizontalCenter: parent.horizontalCenter
+          anchors.top: parent.top
+          !text: tr('Further Items Needed For Fusion')
+          color: #909090
+          margin-top: 2
+
+        Panel
+          id: itemPanel
+          size: 66 66
+          anchors.top: parent.top
+          anchors.left: parent.left
+          margin-top: 22
+          margin-left: 7
+          UIWidget
+            size: 66 66
+            anchors.fill: parent
+            image-source: /images/ui/item
+            phantom: true
+          UIItem
+            id: item
+            anchors.fill: parent
+            size: 50 50
+            virtual: true
+            draggable: false
+          UIWidget
+            id: questionMark
+            size: 8 21
+            anchors.top: parent.top
+            anchors.left: parent.left
+            margin-left: 28
+            margin-top: 22
+            image-source: /images/ui/icon-questionmark
+            visible: true
+        Panel
+          id: itemCount
+          size: 66 20
+          anchors.top: itemPanel.bottom
+          anchors.left: parent.left
+          margin-left: 7
+          margin-top: 3
+          image-source: /images/ui/progress
+          image-border: 7
+          Label
+            id: value
+            !text: tr('0 / 1')
+            anchors.top: parent.top
+            anchors.left: parent.left
+            margin-left: 20
+            margin-top: 4
+            color: #d33c3c
+            text-auto-resize: true
+        Panel
+          id: dustPanel
+          size: 66 66
+          anchors.top: parent.top
+          anchors.left: prev.right
+          margin-top: 22
+          margin-left: 7
+          UIWidget
+            size: 66 66
+            anchors.fill: parent
+            image-source: /images/ui/item
+            phantom: true
+          UIItem
+            id: item
+            anchors.fill: parent
+            size: 50 50
+            virtual: true
+            item-id: 37160
+            draggable: false
+        Panel
+          id: dustCount
+          size: 66 20
+          anchors.top: dustPanel.bottom
+          anchors.left: prev.left
+          margin-top: 3
+          image-source: /images/ui/progress
+          image-border: 7
+          Label
+            id: dustamount
+            text: 100
+            color: #d33c3c
+            anchors.top: parent.top
+            anchors.left: parent.left
+            margin-left: 20
+            margin-top: 4
+            text-auto-resize: true
+          Panel
+            image-source: /images/store/icon-currency-dust
+            anchors.left: prev.right
+            anchors.top: parent.top
+            margin-top: 7
+            margin-left: 2
+        Label
+          id: successRate
+          !text: tr('Success Rate: ')
+          color: #FFFFFF
+          anchors.top: parent.top
+          anchors.left: prev.right
+          width: 80
+          margin-top: 22
+          margin-left: 5
+          text-auto-resize: true
+        Label
+          id: successLabel
+          !text: tr('50%%')
+          anchors.top: parent.top
+          anchors.right: improveRateSuccessPanel.right
+          margin-top: 22
+          text-auto-resize: true
+          color: #f75f5f
+
+        Button
+          id: improveRateSuccessButton
+          size: 108 20
+          !text: tr('Improve to 65%%')
+          anchors.top: successRate.bottom
+          anchors.left: dustCount.right
+          margin-left: 5
+          margin-top: 2
+          font: verdana-11px-antialised
+          enabled: false
+          @onClick: ForgeSystem.rateSuccessActive = not ForgeSystem.rateSuccessActive; ForgeSystem.checkFusionLabels(); ForgeSystem.checkFusionButtons(); ForgeSystem.checkFusionButton()
+
+        Panel
+          id: improveRateSuccessPanel
+          size: 26 20
+          anchors.top: successRate.bottom
+          anchors.left: prev.right
+          margin-top: 2
+          margin-left: 3
+          image-source: /images/ui/progress
+          image-border: 7
+          Panel
+            image-source: /images/store/icon-currency-exaltedcore
+            anchors.right: parent.right
+            anchors.top: parent.top
+            margin-top: 5
+            margin-right: 2
+          Label
+            id: exaltedcoreamount
+            text: 1
+            anchors.top: parent.top
+            anchors.right: prev.left
+            margin-right: 2
+            margin-top: 3
+            text-auto-resize: true
+            color: #d33c3c
+
+        Label
+          !text: tr('Tier Loss: ')
+          color: #FFFFFF
+          anchors.top: prev.bottom
+          anchors.left: dustCount.right
+          width: 80
+          margin-top: 19
+          margin-left: 5
+          text-auto-resize: true
+        Label
+          id: tierLossLabel
+          !text: tr('100%%')
+          anchors.top: prev.top
+          anchors.right: improveRateSuccessPanel.right
+          text-auto-resize: true
+          color: #f75f5f
+
+        Button
+          id: tierLossButton
+          size: 108 20
+          !text: tr('Reduce to 50%%')
+          anchors.top: prev.bottom
+          anchors.left: dustCount.right
+          margin-left: 5
+          margin-top: 2
+          font: verdana-11px-antialised
+          opacity: 0.7
+          enabled: false
+          @onClick: ForgeSystem.tierLossActive = not ForgeSystem.tierLossActive; ForgeSystem.checkFusionLabels(); ForgeSystem.checkFusionButtons(); ForgeSystem.checkFusionButton()
+
+        Panel
+          id: tierLossPanel
+          size: 26 20
+          anchors.top: tierLossLabel.bottom
+          anchors.left: prev.right
+          margin-top: 2
+          margin-left: 3
+          image-source: /images/ui/progress
+          image-border: 7
+          Panel
+            image-source: /images/store/icon-currency-exaltedcore
+            anchors.right: parent.right
+            anchors.top: parent.top
+            margin-top: 5
+            margin-right: 2
+          Label
+            id: exaltedcoreamount
+            text: 1
+            anchors.top: parent.top
+            anchors.right: prev.left
+            margin-right: 2
+            margin-top: 3
+            text-auto-resize: true
+            color: #d33c3c
+
+        UIWidget
+          size: 15 25
+          anchors.verticalCenter: parent.verticalCenter
+          anchors.left: prev.right
+          image-source: /images/arrows/icon-arrow-rightlarge
+          margin-top: 8
+          margin-left: 18
+
+        UIButton
+          id: fusionButton
+          size: 128 66
+          margin-top: 22
+          margin-right: 7
+          anchors.top: parent.top
+          anchors.right: parent.right
+          image-source: /images/ui/bigger-button
+          image-clip: 0 0 128 66
+          enabled: false
+
+          @onMousePress: |
+            self:setImageClip("0 66 128 66")
+            self.item:setMarginTop(16)
+            self.item:setMarginLeft(16)
+            self.itemTo:setMarginTop(16)
+            self.itemTo:setMarginRight(14)
+            self.arrow:setMarginTop(31)
+
+          @onMouseRelease: |
+            self:setImageClip("0 0 128 66")
+            self.item:setMarginTop(15)
+            self.item:setMarginLeft(15)
+            self.itemTo:setMarginTop(15)
+            self.itemTo:setMarginRight(15)
+            self.arrow:setMarginTop(30)
+
+          @onHoverChange: |
+            self:setImageClip("0 0 128 66")
+            self.item:setMarginTop(15)
+            self.item:setMarginLeft(15)
+            self.itemTo:setMarginTop(15)
+            self.itemTo:setMarginRight(15)
+            self.arrow:setMarginTop(30)
+
+          UIItem
+            id: item
+            size: 32 32
+            anchors.top: parent.top
+            anchors.left: parent.left
+            margin-left: 15
+            margin-top: 15
+            virtual: true
+            draggable: false
+            phantom: true
+            UIWidget
+              id: tierflags
+              visible: false
+              size: 9 8
+              image-source: /images/game/items/tiers-strip
+              image-clip: 0 0 9 8
+              anchors.top: parent.top
+              anchors.right: parent.right
+              margin-top: 1
+            UIWidget
+              id: questionMark
+              size: 8 21
+              anchors.top: parent.top
+              anchors.right: parent.right
+              margin-right: 10
+              margin-top: 7
+              image-source: /images/ui/icon-questionmark
+              visible: true
+          UIWidget
+            id: arrow
+            size: 15 7
+            margin-top: 30
+            margin-left: 15
+            anchors.top: parent.top
+            anchors.left: prev.right
+            image-source: /images/arrows/icon_3arrows
+            phantom: true
+          UIItem
+            id: itemTo
+            size: 32 32
+            anchors.top: parent.top
+            anchors.right: parent.right
+            margin-right: 15
+            margin-top: 15
+            virtual: true
+            draggable: false
+            phantom: true
+            UIWidget
+              id: tierflags
+              visible: false
+              size: 9 8
+              image-source: /images/game/items/tiers-strip
+              image-clip: 0 0 9 8
+              anchors.top: parent.top
+              anchors.right: parent.right
+              margin-top: 1
+            UIWidget
+              id: questionMark
+              size: 8 21
+              anchors.top: parent.top
+              anchors.right: parent.right
+              margin-right: 10
+              margin-top: 7
+              image-source: /images/ui/icon-questionmark
+              visible: true
+          Panel
+            id: locked
+            anchors.fill: parent
+            margin: 1 1 1 1
+            image-source: /images/ui/ditherpattern64
+            image-border: 3
+          @onClick: modules.game_forge.ForgeSystem.sendForgeFusion(false)
+
+        Panel
+          id: moneyPanel
+          size: 128 20
+          anchors.top: prev.bottom
+          anchors.right: parent.right
+          margin-top: 3
+          margin-right: 7
+          image-source: /images/ui/progress
+          image-border: 7
+          Label
+            id: gold
+            !text: tr('$')
+            anchors.fill: parent
+            margin-right: 2
+            margin-top: 1
+            text-auto-resize: true
+            text-align: center
+            font: verdana-11px-antialised
+            color: #d33c3c
+
+      Panel
+        id: converFusion
+        size: 469 117
+        anchors.left: parent.left
+        anchors.top: itemFusionPanel.bottom
+        image-source: /images/ui/t2pixel-up-frame-borderimage
+        image-border: 30
+        margin-top: 5
+        margin-left: -10
+        visible: false
+        Label
+          anchors.horizontalCenter: parent.horizontalCenter
+          anchors.top: parent.top
+          !text: tr('Further Items Needed For Convergence Fusion')
+          color: #909090
+          margin-top: 2
+
+        Panel
+          id: convergencePanel
+          anchors.fill: parent
+          margin: 22 7 5 7
+
+          TextList
+            id: itemsConvergencePanel
+            size: 165 88
+            anchors.left: parent.left
+            anchors.top: prev.bottom
+            vertical-scrollbar: itemsConvergencePanelListScrollBar
+            margin-top: 5
+            padding-top: 3
+            padding-left: 3
+            layout:
+              type: grid
+              cell-size: 36 36
+              num-columns: 4
+              cell-spacing: 1
+
+          VerticalScrollBar
+            id: itemsConvergencePanelListScrollBar
+            anchors.top: prev.top
+            anchors.bottom: prev.bottom
+            anchors.right: prev.right
+            margin-right: 1
+            margin-top: 1
+            margin-bottom: 1
+            step: 24
+            pixels-scroll: true
+
+          Panel
+            id: dustPanel
+            size: 66 66
+            anchors.top: parent.top
+            anchors.left: prev.right
+            margin-left: 7
+            UIItem
+              id: item
+              anchors.fill: parent
+              size: 50 50
+              virtual: true
+              draggable: false
+          Panel
+            id: dustCount
+            size: 66 20
+            anchors.top: dustPanel.bottom
+            anchors.left: prev.left
+            margin-top: 3
+            image-source: /images/ui/progress
+            image-border: 7
+            Panel
+              image-source: /images/store/icon-currency-dust
+              anchors.right: parent.right
+              anchors.top: parent.top
+              margin-top: 8
+              margin-right: 16
+            Label
+              id: dustamount
+              text: 100
+              color: #d33c3c
+              anchors.top: parent.top
+              anchors.right: prev.left
+              margin-right: 2
+              margin-top: 4
+              text-auto-resize: true
+
+          UIWidget
+            size: 15 25
+            anchors.top: parent.top
+            anchors.left: prev.right
+            image-source: /images/arrows/icon-arrow-rightlarge
+            margin-top: 32
+            margin-left: 66
+
+          UIButton
+            id: fusionButton
+            size: 128 66
+            anchors.top: parent.top
+            anchors.right: parent.right
+            image-source: /images/ui/bigger-button
+            enabled: false
+            image-clip: 0 0 128 66
+
+            @onMousePress: |
+              self:setImageClip("0 66 128 66")
+              self.item:setMarginTop(16)
+              self.item:setMarginLeft(16)
+              self.itemTo:setMarginTop(16)
+              self.itemTo:setMarginRight(14)
+              self.arrow:setMarginTop(31)
+
+            @onMouseRelease: |
+              self:setImageClip("0 0 128 66")
+              self.item:setMarginTop(15)
+              self.item:setMarginLeft(15)
+              self.itemTo:setMarginTop(15)
+              self.itemTo:setMarginRight(15)
+              self.arrow:setMarginTop(30)
+
+            @onHoverChange: |
+              self:setImageClip("0 0 128 66")
+              self.item:setMarginTop(15)
+              self.item:setMarginLeft(15)
+              self.itemTo:setMarginTop(15)
+              self.itemTo:setMarginRight(15)
+              self.arrow:setMarginTop(30)
+
+            UIItem
+              id: item
+              size: 32 32
+              anchors.top: parent.top
+              anchors.left: parent.left
+              margin-left: 15
+              margin-top: 15
+              virtual: true
+              draggable: false
+              phantom: true
+              UIWidget
+                id: tierflags
+                visible: false
+                size: 9 8
+                image-source: /images/game/items/tiers-strip
+                image-clip: 0 0 9 8
+                anchors.top: parent.top
+                anchors.right: parent.right
+                margin-top: 1
+              UIWidget
+                id: questionMark
+                size: 8 21
+                anchors.top: parent.top
+                anchors.right: parent.right
+                margin-right: 10
+                margin-top: 7
+                image-source: /images/ui/icon-questionmark
+                visible: true
+            UIWidget
+              id: arrow
+              size: 15 7
+              margin-top: 30
+              margin-left: 15
+              anchors.top: parent.top
+              anchors.left: prev.right
+              image-source: /images/arrows/icon_3arrows
+              phantom: true
+            UIItem
+              id: itemTo
+              size: 32 32
+              anchors.top: parent.top
+              anchors.right: parent.right
+              margin-right: 15
+              margin-top: 15
+              virtual: true
+              draggable: false
+              phantom: true
+              UIWidget
+                id: tierflags
+                visible: false
+                size: 9 8
+                image-source: /images/game/items/tiers-strip
+                image-clip: 0 0 9 8
+                anchors.top: parent.top
+                anchors.right: parent.right
+                margin-top: 1
+              UIWidget
+                id: questionMark
+                size: 8 21
+                anchors.top: parent.top
+                anchors.right: parent.right
+                margin-right: 10
+                margin-top: 7
+                image-source: /images/ui/icon-questionmark
+                visible: true
+            Panel
+              id: locked
+              anchors.fill: parent
+              margin: 1 1 1 1
+              image-source: /images/ui/ditherpattern64
+              image-border: 3
+            @onClick: modules.game_forge.ForgeSystem.sendForgeFusion(true)
+
+          Panel
+            id: moneyPanel
+            size: 128 20
+            anchors.top: prev.bottom
+            anchors.right: parent.right
+            margin-top: 3
+            image-source: /images/ui/progress
+            image-border: 7
+            Label
+              id: gold
+              !text: tr('$')
+              anchors.fill: parent
+              margin-right: 2
+              margin-top: 1
+              text-auto-resize: true
+              text-align: center
+              font: verdana-11px-antialised
+              color: #d33c3c
+
+      FlatLabel
+        id: description
+        anchors.left: parent.left
+        anchors.top: prev.bottom
+        size: 469 75
+        margin-top: 5
+        margin-left: -10
+        text-wrap: true
+        image-source: /images/ui/2pixel-up-frame-borderimage
+        image-border: 3
+        font: verdana-11px-antialised
+        color: #FFFFFF
+        text-offset: 4 0
+
+    Panel
+      id: transferPanel
+      anchors.fill: parent
+      visible: false
+      Panel
+        id: itemTransferPanel
+        size: 469 112
+        anchors.left: parent.left
+        anchors.top: parent.top
+        margin-left: -10
+        image-source: /images/ui/t2pixel-up-frame-borderimage
+        image-border: 30
+        Label
+          anchors.horizontalCenter: parent.horizontalCenter
+          anchors.top: parent.top
+          !text: tr('Select Items for the Transfer')
+          color: #909090
+          margin-top: 2
+
+        TextList
+          id: itemsPanel
+          size: 165 82
+          anchors.left: parent.left
+          anchors.top: prev.bottom
+          vertical-scrollbar: itemsPanelListScrollBar
+          margin-top: 8
+          margin-left: 7
+          padding-top: 3
+          padding-left: 3
+          layout:
+            type: grid
+            cell-size: 36 36
+            num-columns: 4
+            cell-spacing: 1
+
+        VerticalScrollBar
+          id: itemsPanelListScrollBar
+          anchors.top: prev.top
+          anchors.bottom: prev.bottom
+          anchors.right: prev.right
+          margin-right: 1
+          margin-top: 1
+          margin-bottom: 1
+          step: 24
+          pixels-scroll: true
+
+        Panel
+          id: mindPanel
+          size: 166 80
+          anchors.top: itemsPanel.top
+          anchors.left: prev.right
+          margin-top: 2
+          margin-left: 1
+          UIWidget
+            size: 15 25
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            image-source: /images/arrows/icon-arrow-rightlarge
+            margin-top: -11
+            margin-left: 37
+          UIWidget
+            size: 15 25
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: prev.right
+            image-source: /images/arrows/icon-arrow-rightlarge
+            margin-top: -11
+            margin-left: 5
+          UIWidget
+            size: 15 25
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: prev.right
+            image-source: /images/arrows/icon-arrow-rightlarge
+            margin-top: -11
+            margin-left: 5
+
+          CheckBox
+            id: convergenceCheckBox
+            size: 12 12
+            !text: tr('Convergence')
+            font: verdana-11px-antialised
+            text-auto-resize: true
+            color: #FFFFFF
+            text-offset: 14 -2
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            margin-left: 11
+            image-source: /images/ui/checkbox
+            image-clip: 0 0 12 12
+            @onCheckChange: modules.game_forge.onConvergenceTransferChange(self, self:isChecked())
+
+        TextList
+          id: itemsTransferPanel
+          size: 165 82
+          anchors.right: parent.right
+          anchors.top: parent.top
+          vertical-scrollbar: itemsTransferPanelListScrollBar
+          margin-top: 22
+          margin-right: 7
+          padding-top: 3
+          padding-left: 3
+          layout:
+            type: grid
+            cell-size: 36 36
+            num-columns: 4
+            cell-spacing: 1
+
+        VerticalScrollBar
+          id: itemsTransferPanelListScrollBar
+          anchors.top: prev.top
+          anchors.bottom: prev.bottom
+          anchors.right: prev.right
+          margin-right: 1
+          margin-top: 1
+          margin-bottom: 1
+          step: 24
+          pixels-scroll: true
+
+      Panel
+        id: itemsFusion
+        size: 469 117
+        anchors.left: parent.left
+        anchors.top: prev.bottom
+        image-source: /images/ui/t2pixel-up-frame-borderimage
+        image-border: 30
+        margin-top: 5
+        margin-left: -10
+        visible: true
+        Label
+          anchors.horizontalCenter: parent.horizontalCenter
+          anchors.top: parent.top
+          !text: tr('Transfer Requirements')
+          color: #909090
+          margin-top: 2
+
+        Panel
+          id: itemPanel
+          size: 66 66
+          anchors.top: parent.top
+          anchors.left: parent.left
+          margin-top: 22
+          margin-left: 7
+          UIWidget
+            size: 66 66
+            anchors.fill: parent
+            image-source: /images/ui/item
+            phantom: true
+          UIItem
+            id: item
+            anchors.fill: parent
+            size: 50 50
+            virtual: true
+            draggable: false
+            UIWidget
+              id: tierflags
+              visible: false
+              size: 18 16
+              image-source: /images/game/items/tiers-strip-big
+              image-clip: 0 0 18 16
+              anchors.top: parent.top
+              anchors.right: parent.right
+              margin-top: 1
+            UIWidget
+              id: questionMark
+              size: 8 21
+              anchors.top: parent.top
+              anchors.left: parent.left
+              margin-left: 28
+              margin-top: 22
+              image-source: /images/ui/icon-questionmark
+              visible: true
+        Panel
+          id: itemCount
+          size: 66 20
+          anchors.top: itemPanel.bottom
+          anchors.left: parent.left
+          margin-left: 7
+          margin-top: 3
+          image-source: /images/ui/progress
+          image-border: 7
+          Label
+            id: value
+            !text: tr('0 / 1')
+            anchors.top: parent.top
+            anchors.left: parent.left
+            margin-left: 20
+            margin-top: 4
+            color: #d33c3c
+            text-auto-resize: true
+        Panel
+          id: dustPanel
+          size: 66 66
+          anchors.top: itemPanel.top
+          anchors.left: prev.right
+          margin-left: 7
+          UIWidget
+            size: 66 66
+            anchors.fill: parent
+            image-source: /images/ui/item
+            phantom: true
+          UIItem
+            id: item
+            anchors.fill: parent
+            size: 50 50
+            virtual: true
+            draggable: false
+        Panel
+          id: dustCount
+          size: 66 20
+          anchors.top: dustPanel.bottom
+          anchors.left: prev.left
+          margin-top: 3
+          image-source: /images/ui/progress
+          image-border: 7
+          Label
+            id: dustamount
+            text: 100
+            color: #d33c3c
+            anchors.top: parent.top
+            anchors.left: parent.left
+            margin-left: 20
+            margin-top: 4
+            text-auto-resize: true
+          Panel
+            image-source: /images/store/icon-currency-dust
+            anchors.left: prev.right
+            anchors.top: parent.top
+            margin-top: 7
+            margin-left: 2
+
+        Panel
+          id: exaltedPanel
+          size: 66 66
+          anchors.top: dustPanel.top
+          anchors.left: prev.right
+          margin-left: 7
+          UIWidget
+            size: 66 66
+            anchors.fill: parent
+            image-source: /images/ui/item
+            phantom: true
+          UIItem
+            id: item
+            anchors.fill: parent
+            size: 50 50
+            virtual: true
+            draggable: false
+        Panel
+          id: exaltedCount
+          size: 66 20
+          anchors.top: exaltedPanel.bottom
+          anchors.left: prev.left
+          margin-top: 3
+          image-source: /images/ui/progress
+          image-border: 7
+          Label
+            id: amount
+            text: ???
+            anchors.top: parent.top
+            anchors.left: parent.left
+            margin-left: 20
+            margin-top: 4
+            text-auto-resize: true
+            color: #d33c3c
+          Panel
+            image-source: /images/store/icon-currency-exaltedcore
+            anchors.left: prev.right
+            anchors.top: parent.top
+            margin-top: 6
+            margin-left: 2
+
+        UIWidget
+          size: 15 25
+          anchors.verticalCenter: parent.verticalCenter
+          anchors.left: prev.right
+          image-source: /images/arrows/icon-arrow-rightlarge
+          margin-top: 10
+          margin-left: 53
+
+        UIButton
+          id: transferButton
+          size: 128 66
+          margin-top: 22
+          margin-right: 7
+          anchors.top: parent.top
+          anchors.right: parent.right
+          image-source: /images/ui/bigger-button
+          enabled: false
+          image-clip: 0 0 128 66
+
+          @onMousePress: |
+            self:setImageClip("0 66 128 66")
+            self.item:setMarginTop(16)
+            self.item:setMarginLeft(16)
+            self.itemTo:setMarginTop(16)
+            self.itemTo:setMarginRight(14)
+            self.arrow:setMarginTop(31)
+
+          @onMouseRelease: |
+            self:setImageClip("0 0 128 66")
+            self.item:setMarginTop(15)
+            self.item:setMarginLeft(15)
+            self.itemTo:setMarginTop(15)
+            self.itemTo:setMarginRight(15)
+            self.arrow:setMarginTop(30)
+
+          @onHoverChange: |
+            self:setImageClip("0 0 128 66")
+            self.item:setMarginTop(15)
+            self.item:setMarginLeft(15)
+            self.itemTo:setMarginTop(15)
+            self.itemTo:setMarginRight(15)
+            self.arrow:setMarginTop(30)
+
+          UIItem
+            id: item
+            size: 32 32
+            anchors.top: parent.top
+            anchors.left: parent.left
+            margin-left: 15
+            margin-top: 15
+            virtual: true
+            phantom: true
+            UIWidget
+              id: tierflags
+              visible: false
+              size: 9 8
+              image-source: /images/game/items/tiers-strip
+              image-clip: 0 0 9 8
+              anchors.top: parent.top
+              anchors.right: parent.right
+              margin-top: 1
+            UIWidget
+              id: questionMark
+              size: 8 21
+              anchors.top: parent.top
+              anchors.right: parent.right
+              margin-right: 10
+              margin-top: 7
+              image-source: /images/ui/icon-questionmark
+              visible: true
+          UIWidget
+            id: arrow
+            size: 15 7
+            margin-top: 30
+            margin-left: 15
+            anchors.top: parent.top
+            anchors.left: prev.right
+            image-source: /images/arrows/icon_3arrows
+            phantom: true
+          UIItem
+            id: itemTo
+            size: 32 32
+            anchors.top: parent.top
+            anchors.right: parent.right
+            margin-right: 15
+            margin-top: 15
+            virtual: true
+            phantom: true
+            UIWidget
+              id: tierflags
+              visible: false
+              size: 9 8
+              image-source: /images/game/items/tiers-strip
+              image-clip: 0 0 9 8
+              anchors.top: parent.top
+              anchors.right: parent.right
+              margin-top: 1
+            UIWidget
+              id: questionMark
+              size: 8 21
+              anchors.top: parent.top
+              anchors.right: parent.right
+              margin-right: 10
+              margin-top: 7
+              image-source: /images/ui/icon-questionmark
+              visible: true
+          Panel
+            id: locked
+            anchors.fill: parent
+            margin: 1 1 1 1
+            image-source: /images/ui/ditherpattern64
+            image-border: 3
+          @onClick: modules.game_forge.ForgeSystem.sendForgeTransfer(false)
+
+        Panel
+          id: moneyPanel
+          size: 128 20
+          anchors.top: prev.bottom
+          anchors.right: parent.right
+          margin-top: 3
+          margin-right: 7
+          image-source: /images/ui/progress
+          image-border: 7
+          Label
+            id: gold
+            !text: tr('$')
+            anchors.fill: parent
+            margin-right: 2
+            margin-top: 1
+            text-auto-resize: true
+            text-align: center
+            font: verdana-11px-antialised
+            color: #d33c3c
+
+      Panel
+        id: converFusion
+        size: 469 117
+        anchors.left: parent.left
+        anchors.top: itemTransferPanel.bottom
+        image-source: /images/ui/t2pixel-up-frame-borderimage
+        image-border: 30
+        margin-top: 5
+        margin-left: -10
+        visible: false
+        Label
+          anchors.horizontalCenter: parent.horizontalCenter
+          anchors.top: parent.top
+          !text: tr('Convergence Transfer Requirements')
+          color: #909090
+          margin-top: 2
+
+        Panel
+          id: itemPanel
+          size: 66 66
+          anchors.top: parent.top
+          anchors.left: parent.left
+          margin-top: 22
+          margin-left: 7
+          UIWidget
+            size: 66 66
+            anchors.fill: parent
+            image-source: /images/ui/item
+            phantom: true
+          UIItem
+            id: item
+            anchors.fill: parent
+            size: 50 50
+            virtual: true
+            draggable: false
+            UIWidget
+              id: tierflags
+              visible: false
+              size: 18 16
+              image-source: /images/game/items/tiers-strip-big
+              image-clip: 0 0 18 16
+              anchors.top: parent.top
+              anchors.right: parent.right
+              margin-top: 1
+            UIWidget
+              id: questionMark
+              size: 8 21
+              anchors.top: parent.top
+              anchors.left: parent.left
+              margin-left: 28
+              margin-top: 22
+              image-source: /images/ui/icon-questionmark
+              visible: true
+        Panel
+          id: itemCount
+          size: 66 20
+          anchors.top: itemPanel.bottom
+          anchors.left: parent.left
+          margin-left: 7
+          margin-top: 3
+          image-source: /images/ui/progress
+          image-border: 7
+          Label
+            id: value
+            !text: tr('0 / 1')
+            anchors.top: parent.top
+            anchors.left: parent.left
+            margin-left: 20
+            margin-top: 4
+            color: #d33c3c
+            text-auto-resize: true
+        Panel
+          id: dustPanel
+          size: 66 66
+          anchors.top: itemPanel.top
+          anchors.left: prev.right
+          margin-left: 7
+          UIWidget
+            size: 66 66
+            anchors.fill: parent
+            image-source: /images/ui/item
+            phantom: true
+          UIItem
+            id: item
+            anchors.fill: parent
+            size: 50 50
+            virtual: true
+            draggable: false
+        Panel
+          id: dustCount
+          size: 66 20
+          anchors.top: dustPanel.bottom
+          anchors.left: prev.left
+          margin-top: 3
+          image-source: /images/ui/progress
+          image-border: 7
+          Label
+            id: dustamount
+            text: 100
+            color: #d33c3c
+            anchors.top: parent.top
+            anchors.left: parent.left
+            margin-left: 20
+            margin-top: 4
+            text-auto-resize: true
+          Panel
+            image-source: /images/store/icon-currency-dust
+            anchors.left: prev.right
+            anchors.top: parent.top
+            margin-top: 7
+            margin-left: 2
+
+        Panel
+          id: exaltedPanel
+          size: 66 66
+          anchors.top: dustPanel.top
+          anchors.left: prev.right
+          margin-left: 7
+          UIWidget
+            size: 66 66
+            anchors.fill: parent
+            image-source: /images/ui/item
+            phantom: true
+          UIItem
+            id: item
+            anchors.fill: parent
+            size: 50 50
+            virtual: true
+            draggable: false
+        Panel
+          id: exaltedCount
+          size: 66 20
+          anchors.top: exaltedPanel.bottom
+          anchors.left: prev.left
+          margin-top: 3
+          image-source: /images/ui/progress
+          image-border: 7
+          Label
+            id: amount
+            text: ???
+            anchors.top: parent.top
+            anchors.left: parent.left
+            margin-left: 20
+            margin-top: 4
+            text-auto-resize: true
+            color: #d33c3c
+          Panel
+            image-source: /images/store/icon-currency-exaltedcore
+            anchors.left: prev.right
+            anchors.top: parent.top
+            margin-top: 6
+            margin-left: 2
+
+        UIWidget
+          size: 15 25
+          anchors.verticalCenter: parent.verticalCenter
+          anchors.left: prev.right
+          image-source: /images/arrows/icon-arrow-rightlarge
+          margin-top: 10
+          margin-left: 53
+
+        UIButton
+          id: transferButton
+          size: 128 66
+          margin-top: 22
+          margin-right: 7
+          anchors.top: parent.top
+          anchors.right: parent.right
+          image-source: /images/ui/bigger-button
+          enabled: false
+          image-clip: 0 0 128 66
+
+          @onMousePress: |
+            self:setImageClip("0 66 128 66")
+            self.item:setMarginTop(16)
+            self.item:setMarginLeft(16)
+            self.itemTo:setMarginTop(16)
+            self.itemTo:setMarginRight(14)
+            self.arrow:setMarginTop(31)
+
+          @onMouseRelease: |
+            self:setImageClip("0 0 128 66")
+            self.item:setMarginTop(15)
+            self.item:setMarginLeft(15)
+            self.itemTo:setMarginTop(15)
+            self.itemTo:setMarginRight(15)
+            self.arrow:setMarginTop(30)
+
+          @onHoverChange: |
+            self:setImageClip("0 0 128 66")
+            self.item:setMarginTop(15)
+            self.item:setMarginLeft(15)
+            self.itemTo:setMarginTop(15)
+            self.itemTo:setMarginRight(15)
+            self.arrow:setMarginTop(30)
+
+          UIItem
+            id: item
+            size: 32 32
+            anchors.top: parent.top
+            anchors.left: parent.left
+            margin-left: 15
+            margin-top: 15
+            virtual: true
+            draggable: false
+            phantom: true
+            UIWidget
+              id: tierflags
+              visible: false
+              size: 9 8
+              image-source: /images/game/items/tiers-strip
+              image-clip: 0 0 9 8
+              anchors.top: parent.top
+              anchors.right: parent.right
+              margin-top: 1
+            UIWidget
+              id: questionMark
+              size: 8 21
+              anchors.top: parent.top
+              anchors.right: parent.right
+              margin-right: 10
+              margin-top: 7
+              image-source: /images/ui/icon-questionmark
+              visible: true
+          UIWidget
+            id: arrow
+            size: 15 7
+            margin-top: 30
+            margin-left: 15
+            anchors.top: parent.top
+            anchors.left: prev.right
+            image-source: /images/arrows/icon_3arrows
+            phantom: true
+          UIItem
+            id: itemTo
+            size: 32 32
+            anchors.top: parent.top
+            anchors.right: parent.right
+            margin-right: 15
+            margin-top: 15
+            virtual: true
+            draggable: false
+            phantom: true
+            UIWidget
+              id: tierflags
+              visible: false
+              size: 9 8
+              image-source: /images/game/items/tiers-strip
+              image-clip: 0 0 9 8
+              anchors.top: parent.top
+              anchors.right: parent.right
+              margin-top: 1
+            UIWidget
+              id: questionMark
+              size: 8 21
+              anchors.top: parent.top
+              anchors.right: parent.right
+              margin-right: 10
+              margin-top: 7
+              image-source: /images/ui/icon-questionmark
+              visible: true
+          Panel
+            id: locked
+            anchors.fill: parent
+            margin: 1 1 1 1
+            image-source: /images/ui/ditherpattern64
+            image-border: 3
+          @onClick: modules.game_forge.ForgeSystem.sendForgeTransfer(true)
+
+        Panel
+          id: moneyPanel
+          size: 128 20
+          anchors.top: prev.bottom
+          anchors.right: parent.right
+          margin-top: 3
+          margin-right: 7
+          image-source: /images/ui/progress
+          image-border: 7
+          Label
+            id: gold
+            !text: tr('$')
+            anchors.fill: parent
+            margin-right: 2
+            margin-top: 1
+            text-auto-resize: true
+            text-align: center
+            font: verdana-11px-antialised
+            color: #d33c3c
+
+      FlatLabel
+        id: description
+        anchors.left: parent.left
+        anchors.top: prev.bottom
+        size: 469 75
+        margin-top: 5
+        text-wrap: true
+        image-source: /images/ui/2pixel-up-frame-borderimage
+        image-border: 3
+        margin-left: -10
+        font: verdana-11px-antialised
+        color: #FFFFFF
+        text-offset: 4 0
+
+    Panel
+      id: conversionPanel
+      anchors.fill: parent
+      visible: false
+      Panel
+        id: windowConvertDust
+        size: 153 255
+        anchors.top: parent.top
+        anchors.left: parent.left
+        margin-left: -10
+        image-source: /images/ui/t2pixel-up-frame-borderimage
+        image-border: 24
+        Label
+          id: title
+          anchors.horizontalCenter: parent.horizontalCenter
+          anchors.top: parent.top
+          !text: tr('Convert Dust')
+          color: #8f8f8f
+        Panel
+          id: itemPanel
+          size: 66 66
+          anchors.top: parent.top
+          anchors.horizontalCenter: parent.horizontalCenter
+          margin-top: 25
+          UIItem
+            id: item
+            anchors.fill: parent
+            size: 66 66
+            virtual: true
+            draggable: false
+        Panel
+          id: itemCount
+          size: 66 20
+          anchors.top: itemPanel.bottom
+          anchors.horizontalCenter: parent.horizontalCenter
+          margin-top: 3
+          image-source: /images/ui/progress
+          image-border: 7
+          Label
+            id: amount
+            text: 100
+            anchors.top: parent.top
+            anchors.left: parent.left
+            margin-left: 19
+            margin-top: 3
+            text-auto-resize: true
+            color: #d33c3c
+          Panel
+            id: img
+            image-source: /images/store/icon-currency-dust
+            anchors.left: prev.right
+            anchors.top: parent.top
+            margin-top: 7
+            margin-left: 2
+        UIWidget
+          size: 25 15
+          anchors.top: prev.bottom
+          anchors.horizontalCenter: parent.horizontalCenter
+          image-source: /images/arrows/icon-arrow-downlarge
+          margin-top: 10
+        UIButton
+          id: dustButton
+          size: 83 66
+          anchors.bottom: parent.bottom
+          anchors.horizontalCenter: parent.horizontalCenter
+          margin-bottom: 35
+          image-source: /images/ui/bigger-button
+          enabled: false
+          image-clip: 0 0 128 66
+          @onClick: modules.game_forge.ForgeSystem.sendForgeConverter(2)
+
+          @onMousePress: |
+            self:setImageClip("0 66 128 66")
+          @onMouseRelease: |
+            self:setImageClip("0 0 128 66")
+          @onHoverChange: |
+            self:setImageClip("0 0 128 66")
+
+          UIItem
+            id: item
+            anchors.fill: parent
+            size: 80 60
+            margin-left: 5
+            virtual: true
+            draggable: false
+            phantom: true
+          Panel
+            id: locked
+            anchors.fill: parent
+            margin: 1 1 1 1
+            image-source: /images/ui/ditherpattern
+            image-border: 3
+
+        Label
+          id: generateSlivers
+          !text: tr('Generate 3')
+          anchors.top: prev.bottom
+          anchors.left: prev.left
+          margin-top: 5
+          text-auto-resize: true
+          color: #FFFFFF
+        Panel
+          size: 9 9
+          image-source: /images/store/icon-currency-sliver
+          anchors.left: prev.right
+          anchors.top: prev.top
+          margin-top: 3
+          margin-left: 5
+
+      Panel
+        id: windowConvertSlivers
+        size: 153 255
+        anchors.top: parent.top
+        anchors.left: prev.right
+        margin-left: 6
+        image-source: /images/ui/t2pixel-up-frame-borderimage
+        image-border: 24
+        Label
+          id: title
+          anchors.horizontalCenter: parent.horizontalCenter
+          anchors.top: parent.top
+          !text: tr('Convert Slivers')
+          color: #8f8f8f
+        Panel
+          id: itemPanel
+          size: 66 66
+          anchors.top: parent.top
+          anchors.horizontalCenter: parent.horizontalCenter
+          margin-top: 25
+          UIItem
+            id: item
+            anchors.fill: parent
+            size: 66 66
+            virtual: true
+            draggable: false
+        Panel
+          id: itemCount
+          size: 66 20
+          anchors.top: itemPanel.bottom
+          anchors.horizontalCenter: parent.horizontalCenter
+          margin-top: 3
+          image-source: /images/ui/progress
+          image-border: 7
+          Label
+            id: amount
+            text: 100
+            anchors.top: parent.top
+            anchors.left: parent.left
+            margin-left: 19
+            margin-top: 3
+            text-auto-resize: true
+            color: #d33c3c
+          Panel
+            id: img
+            image-source: /images/store/icon-currency-sliver
+            anchors.left: prev.right
+            anchors.top: parent.top
+            margin-top: 5
+            margin-left: 2
+        UIWidget
+          size: 25 15
+          anchors.top: prev.bottom
+          anchors.horizontalCenter: parent.horizontalCenter
+          image-source: /images/arrows/icon-arrow-downlarge
+          margin-top: 10
+        UIButton
+          id: sliverButton
+          size: 83 66
+          anchors.bottom: parent.bottom
+          anchors.horizontalCenter: parent.horizontalCenter
+          margin-bottom: 35
+          image-source: /images/ui/bigger-button
+          image-clip: 0 0 128 66
+          @onClick: modules.game_forge.ForgeSystem.sendForgeConverter(3)
+
+          @onMousePress: |
+            self:setImageClip("0 66 128 66")
+          @onMouseRelease: |
+            self:setImageClip("0 0 128 66")
+          @onHoverChange: |
+            self:setImageClip("0 0 128 66")
+
+          UIItem
+            id: item
+            anchors.fill: parent
+            size: 80 60
+            margin-left: 5
+            virtual: true
+            phantom: true
+            draggable: false
+          Panel
+            id: locked
+            anchors.fill: parent
+            margin: 1 1 1 1
+            image-source: /images/ui/ditherpattern
+            image-border: 3
+
+        Label
+          id: generateExalted
+          !text: tr('Generate 1')
+          anchors.top: prev.bottom
+          anchors.left: prev.left
+          margin-top: 5
+          text-auto-resize: true
+          color: #FFFFFF
+        Panel
+          size: 9 9
+          image-source: /images/store/icon-currency-exaltedcore
+          anchors.left: prev.right
+          anchors.top: prev.top
+          margin-top: 3
+          margin-left: 6
+
+      Panel
+        id: windowIncreaseDustLimit
+        size: 153 255
+        anchors.top: parent.top
+        anchors.right: parent.right
+        image-source: /images/ui/t2pixel-up-frame-borderimage
+        margin-right: -12
+        image-border: 24
+        Label
+          id: title
+          anchors.horizontalCenter: parent.horizontalCenter
+          anchors.top: parent.top
+          !text: tr('Increase Dust Limit')
+          color: #8f8f8f
+        Panel
+          id: itemPanel
+          size: 66 66
+          anchors.top: parent.top
+          anchors.horizontalCenter: parent.horizontalCenter
+          margin-top: 25
+          UIItem
+            id: item
+            anchors.fill: parent
+            size: 66 66
+            virtual: true
+            draggable: false
+        Panel
+          id: itemCount
+          size: 66 20
+          anchors.top: itemPanel.bottom
+          anchors.horizontalCenter: parent.horizontalCenter
+          margin-top: 3
+          image-source: /images/ui/progress
+          image-border: 7
+          Label
+            id: amount
+            text: 100
+            anchors.top: parent.top
+            anchors.left: parent.left
+            margin-left: 19
+            margin-top: 3
+            text-auto-resize: true
+            color: #d33c3c
+          Panel
+            id: img
+            image-source: /images/store/icon-currency-dust
+            anchors.left: prev.right
+            anchors.top: parent.top
+            margin-top: 7
+            margin-left: 2
+        UIWidget
+          size: 25 15
+          anchors.top: prev.bottom
+          anchors.horizontalCenter: parent.horizontalCenter
+          image-source: /images/arrows/icon-arrow-downlarge
+          margin-top: 10
+        UIButton
+          id: increaseButton
+          size: 128 66
+          anchors.bottom: parent.bottom
+          anchors.horizontalCenter: parent.horizontalCenter
+          margin-bottom: 35
+          image-source: /images/ui/bigger-button
+          image-clip: 0 0 128 66
+          @onClick: modules.game_forge.ForgeSystem.sendForgeConverter(4)
+
+          @onMousePress: |
+            self:setImageClip("0 66 128 66")
+            self.item:setMarginBottom(4)
+            self.item:setMarginLeft(19)
+            self.itemRight:setMarginBottom(9)
+            self.itemRight:setMarginRight(7)
+
+          @onMouseRelease: |
+            self:setImageClip("0 0 128 66")
+            self.item:setMarginBottom(5)
+            self.item:setMarginLeft(18)
+            self.itemRight:setMarginBottom(10)
+            self.itemRight:setMarginRight(8)
+
+          @onHoverChange: |
+            self:setImageClip("0 0 128 66")
+            self.item:setMarginBottom(5)
+            self.item:setMarginLeft(18)
+            self.itemRight:setMarginBottom(10)
+            self.itemRight:setMarginRight(8)
+
+          UIItem
+            id: item
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            size: 65 50
+            margin-bottom: 5
+            margin-left: 18
+            virtual: true
+            phantom: true
+            draggable: false
+          UIItem
+            id: itemRight
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            size: 65 50
+            margin-right: 8
+            margin-bottom: 10
+            virtual: true
+            phantom: true
+            draggable: false
+          Panel
+            id: locked
+            anchors.fill: parent
+            margin: 1 1 1 1
+            image-source: /images/ui/ditherpattern
+            image-border: 3
+        Label
+          id: baseText
+          !text: tr('Raise limit from')
+          anchors.top: increaseButton.bottom
+          anchors.right: increaseButton.right
+          anchors.left: increaseButton.left
+          text-align: center
+          margin-top: 5
+          text-auto-resize: true
+          color: #FFFFFF
+        Label
+          id: currentDust
+          text: 100
+          anchors.top: prev.bottom
+          anchors.left: prev.left
+          margin-top: 2
+          margin-left: 18
+          text-auto-resize: true
+          color: #FFFFFF
+        Panel
+          id: img1
+          size: 9 6
+          image-source: /images/store/icon-currency-dust
+          anchors.left: prev.right
+          anchors.top: prev.top
+          margin-left: 5
+          margin-top: 5
+        Label
+          id: nextDust
+          text: to 101
+          anchors.top: currentDust.top
+          anchors.left: prev.right
+          text-auto-resize: true
+          margin-left: 5
+          color: #FFFFFF
+        Panel
+          id: img2
+          size: 9 6
+          image-source: /images/store/icon-currency-dust
+          anchors.left: prev.right
+          anchors.top: prev.top
+          margin-left: 5
+          margin-top: 5
+
+      Panel
+        id: description
+        size: 468 53
+        anchors.top: prev.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 5
+        margin-left: 1
+        image-source: /images/ui/2pixel-up-frame-borderimage
+        image-border: 3
+
+    Panel
+      id: historyPanel
+      anchors.fill: parent
+      visible: false
+      TextList
+        id: historyList
+        size: 452 288
+        anchors.left: parent.left
+        anchors.top: parent.top
+        margin-left: 1
+        vertical-scrollbar: historyListScroll
+        text-wrap: true
+      VerticalScrollBar
+        id: historyListScroll
+        anchors.top: prev.top
+        anchors.bottom: prev.bottom
+        anchors.right: prev.right
+        margin-right: 1
+        margin-top: 1
+        margin-bottom: 1
+        step: 16
+        visible: false
+        pixels-scroll: true
+      UIWidget
+        size: 452 17
+        anchors.top: historyList.top
+        anchors.left: historyList.left
+        border-width-bottom: 1
+        border-color-bottom: #757575
+      UIWidget
+        id: dateButton
+        size: 145 16
+        text: Date
+        color: #FFFFFF
+        font: verdana-11px-antialised
+        text-offset: 1 -1
+        text-align: leftCenter
+        anchors.top: historyList.top
+        anchors.left: historyList.left
+        margin-top: 1
+        border-width-bottom: 1
+        border-color-bottom: #292a29
+        background-color: #363636
+        opacity: 1.0
+        $pressed:
+          color: #dfdfdf88
+          opacity: 0.8
+      UIWidget
+        height: 285
+        anchors.left: prev.right
+        anchors.top: historyList.top
+        image-source: /images/ui/separator_vertical
+        margin-top: 1
+      UIWidget
+        id: actionButton
+        size: 88 16
+        text: Action
+        font: verdana-11px-antialised
+        color: #FFFFFF
+        text-offset: 4 -1
+        text-align: leftCenter
+        anchors.top: historyList.top
+        anchors.left: dateButton.right
+        margin-top: 1
+        margin-left: 2
+        border-width-bottom: 1
+        border-color-bottom: #292a29
+        background-color: #363636
+        opacity: 1.0
+        $pressed:
+          color: #dfdfdf88
+          opacity: 0.8
+      UIWidget
+        height: 285
+        anchors.left: prev.right
+        anchors.top: historyList.top
+        image-source: /images/ui/separator_vertical
+        margin-top: 1
+      UIWidget
+        id: detailsButton
+        size: 205 16
+        text: Details
+        font: verdana-11px-antialised
+        color: #FFFFFF
+        text-offset: 4 -1
+        text-align: leftCenter
+        anchors.top: historyList.top
+        anchors.left: prev.right
+        margin-top: 1
+        margin-left: 1
+        border-width-bottom: 1
+        border-color-bottom: #292a29
+        background-color: #363636
+        opacity: 1.0
+        $pressed:
+          color: #dfdfdf88
+          opacity: 0.8
+
+    Panel
+      id: resultPanel
+      anchors.fill: parent
+      visible: false
+      Panel
+        id: resultMainWindow
+        size: 401 201
+        anchors.horizontalCenter: parent.horizontalCenter
+        !text: tr('Fusion Result')
+        font: verdana-11px-antialised
+        color: #FFFFFF
+        UIWidget
+          size: 192 70
+          anchors.top: parent.top
+          anchors.horizontalCenter: parent.horizontalCenter
+          margin-top: -85
+          image-source: /images/ui/dragon-animated
+        Panel
+          id: resultContentPanel
+          size: 368 156
+          anchors.fill: parent
+          margin: 12 12 12 12
+
+          Panel
+            id: resultWindow
+            anchors.fill: parent
+            visible: true
+            UIItem
+              id: transferItem
+              size: 65 65
+              anchors.top: parent.top
+              anchors.left: parent.left
+              shader: item_print_white
+              UIWidget
+                id: tierflags
+                visible: false
+                size: 18 16
+                image-source: /images/game/items/tiers-strip-big
+                image-clip: 0 0 18 16
+                anchors.top: parent.top
+                anchors.right: parent.right
+                margin-top: 1
+            UIItem
+              id: recvItem
+              size: 65 65
+              anchors.top: parent.top
+              anchors.right: parent.right
+              shader: item_black_white
+              UIWidget
+                id: tierflags
+                visible: false
+                size: 18 16
+                image-source: /images/game/items/tiers-strip-big
+                image-clip: 0 0 18 16
+                anchors.top: parent.top
+                anchors.right: parent.right
+                margin-top: 1
+            Panel
+              id: panel
+              size: 52 25
+              anchors.top: parent.top
+              anchors.horizontalCenter: parent.horizontalCenter
+              margin-top: 20
+              UIWidget
+                id: tick1
+                size: 14 25
+                anchors.top: parent.top
+                anchors.left: parent.left
+                margin-left: -1
+                image-source: /images/arrows/icon-arrow-rightlarge
+              UIWidget
+                id: tick2
+                size: 14 25
+                anchors.top: parent.top
+                anchors.left: prev.right
+                image-source: /images/arrows/icon-arrow-rightlarge
+                margin-left: 6
+              UIWidget
+                id: tick3
+                size: 14 25
+                anchors.top: parent.top
+                anchors.left: prev.right
+                image-source: /images/arrows/icon-arrow-rightlarge
+                margin-left: 6
+            Label
+              id: resultLabel
+              anchors.top: prev.bottom
+              anchors.horizontalCenter: parent.horizontalCenter
+              !text: tr("Your fusion attempt was successful.")
+              font: verdana-11px-antialised
+              color: #FFFFFF
+              text-auto-resize: true
+              margin-top: 29
+            Button
+              id: finishButton
+              size: 43 20
+              anchors.bottom: parent.bottom
+              anchors.right: parent.right
+              !text: tr("Next")
+              enabled: false
+              font: verdana-11px-antialised
+              @onClick: modules.game_forge.ForgeSystem.closeFinish()
+              Panel
+                id: locked
+                anchors.fill: parent
+                image-source: /images/ui/ditherpattern
+                image-border: 3
+            HorizontalSeparator
+              id: separator
+              anchors.bottom: prev.top
+              anchors.left: parent.left
+              anchors.right: parent.right
+              margin-bottom: 10
+
+          Panel
+            id: bonusWindow
+            anchors.fill: parent
+            visible: false
+            UIItem
+              id: bonusItem
+              size: 65 65
+              anchors.top: parent.top
+              anchors.horizontalCenter: parent.horizontalCenter
+              UIWidget
+                id: tierflags
+                visible: false
+                size: 18 16
+                image-source: /images/game/items/tiers-strip-big
+                image-clip: 0 0 18 16
+                anchors.top: parent.top
+                anchors.right: parent.right
+                margin-top: 1
+            Label
+              id: resultLabel
+              anchors.top: prev.bottom
+              anchors.horizontalCenter: parent.horizontalCenter
+              !text: tr("What luck! Your item only lost one tier instead of being\n                                     consumed.")
+              font: verdana-11px-antialised
+              color: #FFFFFF
+              text-auto-resize: true
+              margin-top: 10
+            Button
+              id: finishButton
+              size: 43 20
+              anchors.bottom: parent.bottom
+              anchors.right: parent.right
+              !text: tr("Close")
+              @onClick: modules.game_forge.ForgeSystem.closeFinish()
+            HorizontalSeparator
+              id: separator
+              anchors.bottom: prev.top
+              anchors.left: parent.left
+              anchors.right: parent.right
+              margin-bottom: 10
+
+  HorizontalSeparator
+    id: separator
+    anchors.top: prev.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 20
+    margin-left: 5
+    margin-right: 5
+
+  Panel
+    id: moneyPanel
+    size: 130 20
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    margin-left: 5
+    margin-bottom: -3
+    image-source: /images/ui/progress
+    image-border: 7
+    Panel
+      image-source: /images/store/icon-goldcoin
+      anchors.right: parent.right
+      anchors.top: parent.top
+      margin-top: 6
+      margin-right: 3
+    Label
+      id: gold
+      !text: tr('0')
+      anchors.top: parent.top
+      anchors.right: prev.left
+      margin-right: 5
+      margin-top: 3
+      font: verdana-11px-antialised
+      color: #FFFFFF
+      text-auto-resize: true
+
+  Panel
+    id: dustPanel
+    size: 78 20
+    anchors.bottom: parent.bottom
+    anchors.left: prev.right
+    margin-left: 5
+    margin-bottom: -3
+    image-source: /images/ui/progress
+    image-border: 7
+    Panel
+      image-source: /images/store/icon-currency-dust
+      anchors.right: parent.right
+      anchors.top: parent.top
+      margin-top: 8
+      margin-right: 3
+    Label
+      id: dust
+      !text: tr('0 / 100')
+      anchors.top: parent.top
+      anchors.right: prev.left
+      margin-right: 5
+      margin-top: 3
+      font: verdana-11px-antialised
+      color: #FFFFFF
+      text-auto-resize: true
+
+  Panel
+    id: sliversPanel
+    size: 52 20
+    anchors.bottom: parent.bottom
+    anchors.left: prev.right
+    margin-left: 5
+    margin-bottom: -3
+    image-source: /images/ui/progress
+    image-border: 7
+    Panel
+      image-source: /images/store/icon-currency-sliver
+      anchors.right: parent.right
+      anchors.top: parent.top
+      margin-top: 5
+      margin-right: 2
+    Label
+      id: slivers
+      !text: tr('0')
+      anchors.top: parent.top
+      anchors.right: prev.left
+      margin-right: 5
+      margin-top: 3
+      font: verdana-11px-antialised
+      color: #FFFFFF
+      text-auto-resize: true
+
+  Panel
+    id: exaltedcorePanel
+    size: 52 20
+    anchors.bottom: parent.bottom
+    anchors.left: prev.right
+    margin-left: 5
+    margin-bottom: -3
+    image-source: /images/ui/progress
+    image-border: 7
+    Panel
+      image-source: /images/store/icon-currency-exaltedcore
+      anchors.right: parent.right
+      anchors.top: parent.top
+      margin-top: 5
+      margin-right: 2
+    Label
+      id: exaltedcore
+      !text: tr('0')
+      anchors.top: parent.top
+      anchors.right: prev.left
+      margin-right: 5
+      margin-top: 3
+      font: verdana-11px-antialised
+      color: #FFFFFF
+      text-auto-resize: true
+
+  Button
+    id: close
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    !text: tr('Close')
+    size: 40 20
+    margin-bottom: -3
+    margin-right: 2
+    @onClick: modules.game_forge.offlineForge()

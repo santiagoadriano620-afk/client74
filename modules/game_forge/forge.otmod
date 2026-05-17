@@ -1,0 +1,9 @@
+Module
+  name: game_forge
+  description: Forge
+  author: MMOServers
+  website:
+  sandboxed: true
+  scripts: [ forgeprotocol, forge ]
+  @onLoad: init()
+  @onUnload: terminate()
