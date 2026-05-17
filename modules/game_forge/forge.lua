@@ -1,4 +1,4 @@
-﻿forgeWindow = nil
+forgeWindow = nil
 selectedItemFusionRadio = nil
 resultWindow = nil
 selectedConvergenceFusionRadio = nil
@@ -529,7 +529,7 @@ function ForgeSystem.init(classPrice, transferMap, fusionPrices, transferPrices,
     conversionPanel:getChildById('windowConvertSlivers'):getChildById('sliverButton').item:setItemId(37110)
     bindButtonClick(conversionPanel:getChildById('windowConvertSlivers'):getChildById('sliverButton'), function() ForgeSystem.sendForgeConverter(3) end)
 
-    local totalDustRequired = (100 - ForgeSystem.dustCost) + (ForgeSystem.maxPlayerDust - 100)
+    local totalDustRequired = ForgeSystem.maxPlayerDust - 75
     conversionPanel:getChildById('windowIncreaseDustLimit'):getChildById('itemPanel').item:setItemId(37160)
     conversionPanel:getChildById('windowIncreaseDustLimit'):getChildById('itemCount').amount:setText(totalDustRequired)
     conversionPanel:getChildById('windowIncreaseDustLimit'):getChildById('itemCount').amount:setColor("#d33c3c")
@@ -1681,7 +1681,7 @@ function ForgeSystem.updateConversion()
   conversionPanel:getChildById('windowConvertSlivers').sliverButton:setEnabled(slivers >= ForgeSystem.totalSlivers)
   conversionPanel:getChildById('windowConvertSlivers').sliverButton.locked:setVisible(slivers < ForgeSystem.totalSlivers)
 
-  local totalDustRequired = (100 - ForgeSystem.dustCost) + (ForgeSystem.maxPlayerDust - 100)
+  local totalDustRequired = ForgeSystem.maxPlayerDust - 75
   conversionPanel:getChildById('windowIncreaseDustLimit'):getChildById('itemCount').amount:setText(totalDustRequired)
   conversionPanel:getChildById('windowIncreaseDustLimit'):getChildById('itemCount').amount:setColor(dust >= totalDustRequired and "#FFFFFF" or "#d33c3c")
   conversionPanel:getChildById('windowIncreaseDustLimit').currentDust:setText(ForgeSystem.maxPlayerDust)
