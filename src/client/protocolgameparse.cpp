@@ -22,6 +22,10 @@
 
 #include "protocolgame.h"
 
+#include <vector>
+#include <tuple>
+#include <functional>
+
 #include "localplayer.h"
 #include "thingtypemanager.h"
 #include "game.h"
@@ -2868,8 +2872,40 @@ void ProtocolGame::parseServerTime(const InputMessagePtr& msg)
 
 void ProtocolGame::parseQuestTracker(const InputMessagePtr& msg)
 {
-    msg->getU8();
-    msg->getU16();
+    const uint8_t messageType = msg->getU8();
+    switch (messageType) {
+        case 1: {
+            const uint8_t remainingQuests = msg->getU8();
+            const uint8_t missionCount = msg->getU8();
+            std::vector<std::tuple<uint16_t, uint16_t, std::string, std::string, std::string>> missions;
+            for (uint8_t i = 0; i < missionCount; ++i) {
+                uint8_t questId = 0;
+                if (g_game.getClientVersion() >= 1410) {
+                    questId = msg->getU16();
+                }
+                const uint16_t missionId = msg->getU16();
+                const std::string& questName = msg->getString();
+                const std::string& missionName = msg->getString();
+                const std::string& missionDesc = msg->getString();
+                missions.emplace_back(questId, missionId, questName, missionName, missionDesc);
+            }
+            return g_lua.callGlobalField("g_game", "onQuestTracker", remainingQuests, missions);
+        }
+        case 0: {
+            uint8_t questId = 0;
+            if (g_game.getClientVersion() >= 1410) {
+                questId = msg->getU16();
+            }
+            const uint16_t missionId = msg->getU16();
+            std::string questName = "";
+            if (g_game.getClientVersion() >= 1410) {
+                questName = msg->getString();
+            }
+            const std::string& missionName = msg->getString();
+            const std::string& missionDesc = msg->getString();
+            return g_lua.callGlobalField("g_game", "onUpdateQuestTracker", questId, missionId, questName, missionName, missionDesc);
+        }
+    }
 }
 
 void ProtocolGame::parseImbuementWindow(const InputMessagePtr& msg)
@@ -3029,17 +3065,49 @@ void ProtocolGame::parseTournamentLeaderboard(const InputMessagePtr& msg)
 
 void ProtocolGame::parseKillTracker(const InputMessagePtr& msg)
 {
-    msg->getString();
-    msg->getU16();
-    msg->getU8();
-    msg->getU8();
-    msg->getU8();
-    msg->getU8();
-    msg->getU8();
-    int corpseSize = msg->getU8(); // corpse size
-    for (int i = 0; i < corpseSize; i++) {
-        getItem(msg); // corpse item    
-    }
+    const std::string& monsterName = msg->getString();
+    const Outfit& monsterOutfit = getOutfit(msg, false);
+
+    std::vector<ItemPtr> dropItems;
+
+    std::function<void(int)> parseContainer = [&](int depth) {
+        if (depth > 4) {
+            msg->getU8(); // Consume depth limit fallback byte (0)
+            return;
+        }
+
+        uint8_t itemCount = msg->getU8();
+        for (int i = 0; i < itemCount; ++i) {
+            uint16_t itemId = msg->getU16();
+            ItemPtr item = Item::create(itemId);
+
+            bool isContainer = false;
+            if (item) {
+                isContainer = item->isContainer();
+            }
+
+            if (isContainer) {
+                parseContainer(depth + 1);
+            } else {
+                uint8_t count = msg->getU8();
+                uint16_t worth = msg->getU16();
+                std::string itemName = msg->getString();
+
+                if (item) {
+                    item->setCount(count);
+                }
+            }
+
+            if (item) {
+                dropItems.push_back(item);
+            }
+        }
+    };
+
+    parseContainer(1);
+
+    // Fire the Lua callback with monster kill data
+    g_lua.callGlobalField("g_game", "onKillTracker", monsterName, monsterOutfit, dropItems);
 }
 
 void ProtocolGame::parseSupplyTracker(const InputMessagePtr& msg)
@@ -3049,8 +3117,21 @@ void ProtocolGame::parseSupplyTracker(const InputMessagePtr& msg)
 
 void ProtocolGame::parseImpactTracker(const InputMessagePtr& msg)
 {
-    msg->getU8();
-    msg->getU32();
+    const uint8_t analyzerType = msg->getU8();
+    const uint32_t amount = msg->getU32();
+
+    uint8_t effect = 0;  // Default effect for healing
+    std::string target = "";  // Default empty target
+
+    if (analyzerType == 1) {  // ANALYZER_DAMAGE_DEALT
+        effect = msg->getU8();  // Element/combat type
+    } else if (analyzerType == 2) {  // ANALYZER_DAMAGE_RECEIVED
+        effect = msg->getU8();  // Element/combat type
+        target = msg->getString();  // Target name
+    }
+
+    // Call the onImpactTracker callback to expose the data to Lua
+    g_lua.callGlobalField("g_game", "onImpactTracker", analyzerType, amount, effect, target);
 }
 
 void ProtocolGame::parseItemsPrices(const InputMessagePtr& msg)
@@ -3064,20 +3145,17 @@ void ProtocolGame::parseItemsPrices(const InputMessagePtr& msg)
 
 void ProtocolGame::parseLootTracker(const InputMessagePtr& msg)
 {
-    msg->getU8();
-    if (g_game.getFeature(Otc::GameTibia12Protocol) && g_game.getProtocolVersion() >= 1220) {
-        msg->getU8();
+    uint16_t itemId = msg->getU16();
+    ItemPtr item = Item::create(itemId);
+    if (item) {
+        if (item->isStackable() || item->isFluidContainer() || item->isSplash() || item->isChargeable()) {
+            item->setCountOrSubType(g_game.getFeature(Otc::GameCountU16) ? msg->getU16() : msg->getU8());
+        }
     }
-    msg->getU8();
-    msg->getString();
-    getItem(msg);
-    msg->getU8();
+    const auto& itemName = msg->getString();
 
-    uint8_t count = msg->getU8();
-    for (uint8_t i = 0; i < count; ++i) {
-        msg->getString();
-        msg->getString();
-    }
+    // Call the onLootStats callback to expose the data to Lua
+    g_lua.callGlobalField("g_game", "onLootStats", item, itemName);
 }
 
 void ProtocolGame::parseItemDetail(const InputMessagePtr& msg)
