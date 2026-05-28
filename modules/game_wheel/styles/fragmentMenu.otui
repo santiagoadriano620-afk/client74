@@ -5,11 +5,10 @@ FragmentPanel < UIWidget
   phantom: false
   focusable: true
   border-color: alpha
-  border-width: 0
+  border-width: 2
 
   $focus:
     border-color: white
-    border-width: 2
 
   UIButton
     id: socketed
@@ -68,9 +67,10 @@ Panel
   anchors.fill: parent
   Panel
     id: noModGrade
-    size: 352 521
+    width: 352
     anchors.left: parent.left
     anchors.top: parent.top
+    anchors.bottom: parent.bottom
     image-source: /images/ui/t2pixel-up-frame-borderimage
     image-border: 30
     Label
@@ -88,9 +88,10 @@ Panel
       margin-top: 2
   Panel
     id: modGrade
-    size: 352 521
+    width: 352
     anchors.left: parent.left
     anchors.top: parent.top
+    anchors.bottom: parent.bottom
     image-source: /images/ui/t2pixel-up-frame-borderimage
     image-border: 30
     visible: false
@@ -422,13 +423,13 @@ Panel
       //Grade IV
       Label
         id: grade3
-        anchors.top: parent.top
+        anchors.top: modBg3.top
         anchors.left: modBg3.right
+        margin-left: 25
+        margin-top: 10
         !text: tr('Grade IV')
         font: Verdana Bold-11px
         color: #707070
-        margin-left: 109
-        margin-top: 45
       Label
         id: bonus3
         anchors.horizontalCenter: prev.horizontalCenter
@@ -442,13 +443,13 @@ Panel
       //Grade III
       Label
         id: grade2
-        anchors.top: grade3.bottom
-        anchors.left: modBg3.right
+        anchors.top: modBg2.top
+        anchors.left: modBg2.right
+        margin-left: 25
+        margin-top: 10
         !text: tr('Grade III')
         font: Verdana Bold-11px
         color: #707070
-        margin-left: 107
-        margin-top: 95
       Label
         id: bonus2
         anchors.horizontalCenter: prev.horizontalCenter
@@ -462,13 +463,13 @@ Panel
       //Grade II
       Label
         id: grade1
-        anchors.top: grade2.bottom
-        anchors.left: modBg3.right
+        anchors.top: modBg1.top
+        anchors.left: modBg1.right
+        margin-left: 25
+        margin-top: 10
         !text: tr('Grade II')
         font: Verdana Bold-11px
         color: #707070
-        margin-left: 110
-        margin-top: 95
       Label
         id: bonus1
         anchors.horizontalCenter: prev.horizontalCenter
@@ -482,13 +483,13 @@ Panel
       //Grade I
       Label
         id: grade0
-        anchors.top: grade1.bottom
-        anchors.left: modBg3.right
+        anchors.top: modBg0.top
+        anchors.left: modBg0.right
+        margin-left: 25
+        margin-top: 10
         !text: tr('Grade I')
         font: Verdana Bold-11px
         color: #c0c0c0
-        margin-left: 113
-        margin-top: 85
       Label
         id: bonus0
         anchors.horizontalCenter: prev.horizontalCenter
@@ -496,7 +497,6 @@ Panel
         !text: tr('+x%% Some Bonus')
         font: Verdana Bold-11px
         color: #c0c0c0
-        //color: #707070
         text-auto-resize: true
         text-align: center
 
@@ -504,8 +504,8 @@ Panel
     id: filterPanel
     size: 611 20
     anchors.top: parent.top
-    anchors.left: prev.right
-    margin-left: 6
+    anchors.left: parent.left
+    margin-left: 358
     TextEdit
       id: searchText
       size: 155 20
@@ -593,10 +593,12 @@ Panel
 
   UIWidget
     id: fragmentPanelBackground
-    size: 611 497
+    anchors.left: parent.left
+    margin-left: 358
     anchors.right: parent.right
     anchors.top: prev.bottom
     margin-top: 6
+    anchors.bottom: parent.bottom
     image-source: /images/ui/1pixel-down-frame
     image-border: 1
     Panel

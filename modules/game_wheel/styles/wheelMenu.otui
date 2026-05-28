@@ -1,19 +1,21 @@
 PerksPanel < Panel
-  size: 200 16
+  height: 16
+  anchors.left: parent.left
+  anchors.right: parent.right
   Label
     id: perk
     !text: tr('Healing Link')
-    width: 102
     anchors.top: parent.top
     anchors.left: parent.left
+    anchors.right: value.left
+    margin-right: 5
     text-align: topleft
     font: Verdana Bold-11px-wheel
     color: #c0c0c0
-    text-auto-resize: true
   Label
     id: value
     !text: tr('0%%')
-    width: 88
+    width: 60
     anchors.top: parent.top
     anchors.right: parent.right
     text-align: topright
@@ -32,7 +34,9 @@ PerksPanel < Panel
     visible: false
 
 PresetLabel < Panel
-  size: 207 16
+  height: 16
+  anchors.left: parent.left
+  anchors.right: parent.right
   background-color: #484848
 
   $focus:
@@ -40,9 +44,10 @@ PresetLabel < Panel
 
   Label
     id: name
-    size: 157 16
     anchors.top: parent.top
     anchors.left: parent.left
+    anchors.right: sep.left
+    height: 16
     text-align: left
     font: Verdana Bold-11px
     color: #c0c0c0
@@ -51,16 +56,16 @@ PresetLabel < Panel
   VerticalSeparator
     id: sep
     anchors.top: parent.top
-    anchors.left: prev.right
+    anchors.right: points.left
     height: 16
-    margin-left: 1
+    margin-right: 1
 
   Label
     id: points
-    size: 48 16
+    width: 48
     anchors.top: parent.top
-    anchors.left: prev.right
     anchors.right: parent.right
+    height: 16
     text-align: right
     font: Verdana Bold-11px
     color: #c0c0c0
@@ -381,9 +386,10 @@ Panel
 
   Panel
     id: info
-    size: 213 267
+    width: 213
     anchors.left: parent.left
     anchors.top: prev.bottom
+    anchors.bottom: parent.bottom
     image-source: /images/ui/2pixel-up-frame-borderimage
     image-border: 30
     margin-top: 5
@@ -970,9 +976,10 @@ Panel
 
   Panel
     id: revelationPerks
-    size: 213 102
+    width: 213
     anchors.top: prev.bottom
     anchors.right: parent.right
+    anchors.bottom: parent.bottom
     margin-top: 6
     image-source: /images/ui/t2pixel-up-frame-borderimage
     image-border: 30
@@ -1169,9 +1176,8 @@ Panel
   UIWidget
     id: wheelPanel
     size: 522 522
-    anchors.top: parent.top
-    anchors.left: selection.right
-    margin-left: 11
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.horizontalCenter: parent.horizontalCenter
     @onClick: modules.game_wheel.onWheelClick(g_window:getMousePosition())
 
     Panel

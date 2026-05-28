@@ -83,3 +83,7 @@ function setStringFont(t, text, color, font)
   table.insert(t, color)
   table.insert(t, font)
 end
+
+function string.empty(str)
+	return not str or #str == 0
+end

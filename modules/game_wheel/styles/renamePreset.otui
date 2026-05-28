@@ -1,7 +1,7 @@
 MainWindow
   id: renamePreset
   !text: tr('Rename Preset')
-  anchors.horizontalCenter: parent.horizontalCenter
+  anchors.centerIn: parent
   size: 625 121
   @onClose:
 

@@ -173,6 +173,8 @@ GemPanel < UIWidget
   size: 157 106
   image-source: /images/ui/2pixel-up-frame-borderimage
   image-border: 3
+  border-width: 2
+  border-color: alpha
 
   UIButton
     id: locker
@@ -442,6 +444,7 @@ Panel
 
       UIWidget
         id: vesselBg0
+        size: 34 34
         anchors.top: parent.top
         anchors.left: parent.left
         image-source: /images/game/wheel/backdrop_skillwheel_socket_inactive
@@ -492,6 +495,7 @@ Panel
 
       UIWidget
         id: vesselBg1
+        size: 34 34
         anchors.top: parent.top
         anchors.right: parent.right
         image-source: /images/game/wheel/backdrop_skillwheel_socket_inactive
@@ -542,6 +546,7 @@ Panel
 
       UIWidget
         id: vesselBg2
+        size: 34 34
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         image-source: /images/game/wheel/backdrop_skillwheel_socket_inactive
@@ -592,6 +597,7 @@ Panel
 
       UIWidget
         id: vesselBg3
+        size: 34 34
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         image-source: /images/game/wheel/backdrop_skillwheel_socket_inactive
@@ -636,9 +642,10 @@ Panel
 
   Panel
     id: gemRevelation
-    size: 146 363
+    width: 146
     anchors.left: parent.left
     anchors.top: prev.bottom
+    anchors.bottom: parent.bottom
     margin-top: 5
     image-source: /images/ui/t2pixel-up-frame-borderimage
     image-border: 30
@@ -682,12 +689,13 @@ Panel
 
       Label
         id: gemInfo0
-        size: 135 32
         anchors.top: parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.left: parent.left
+        anchors.right: parent.right
         margin-top: 60
-        margin-left: 19
-        margin-right: 20
+        margin-left: 2
+        margin-right: 2
+        height: 32
         !text: tr('Lesser Gem (x 0)')
         text-wrap: true
         text-align: center
@@ -763,12 +771,13 @@ Panel
 
       Label
         id: gemInfo1
-        size: 135 32
         anchors.top: parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.left: parent.left
+        anchors.right: parent.right
         margin-top: 60
-        margin-left: 19
-        margin-right: 20
+        margin-left: 2
+        margin-right: 2
+        height: 32
         !text: tr('Lesser Gem (x 0)')
         text-wrap: true
         text-align: center
@@ -844,12 +853,13 @@ Panel
 
       Label
         id: gemInfo2
-        size: 135 32
         anchors.top: parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.left: parent.left
+        anchors.right: parent.right
         margin-top: 60
-        margin-left: 19
-        margin-right: 20
+        margin-left: 2
+        margin-right: 2
+        height: 32
         !text: tr('Lesser Gem (x 0)')
         text-wrap: true
         text-align: center
@@ -904,7 +914,9 @@ Panel
 
   Panel
     id: clickedPanel
-    size: 817 154
+    height: 154
+    anchors.left: vessels.right
+    margin-left: 5
     anchors.right: parent.right
     anchors.top: parent.top
     image-source: /images/ui/t2pixel-up-frame-borderimage
@@ -1089,7 +1101,9 @@ Panel
 
   Panel
     id: filterPanel
-    size: 817 20
+    height: 20
+    anchors.left: vessels.right
+    margin-left: 5
     anchors.right: parent.right
     anchors.top: prev.bottom
     margin-top: 5
@@ -1214,10 +1228,12 @@ Panel
 
   UIWidget
     id: gemsPanelBackground
-    size: 817 338
+    anchors.left: vessels.right
+    margin-left: 5
     anchors.right: parent.right
     anchors.top: prev.bottom
     margin-top: 5
+    anchors.bottom: parent.bottom
     image-source: /images/ui/1pixel-down-frame
     image-border: 1
     Panel

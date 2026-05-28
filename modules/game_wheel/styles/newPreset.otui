@@ -1,7 +1,7 @@
 MainWindow
   id: newPreset
   !text: tr('New Preset')
-  anchors.horizontalCenter: parent.horizontalCenter
+  anchors.centerIn: parent
   size: 625 201
   @onClose:
 
