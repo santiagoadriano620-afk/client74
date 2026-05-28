@@ -642,10 +642,9 @@ Panel
 
   Panel
     id: gemRevelation
-    width: 146
+    size: 146 363
     anchors.left: parent.left
     anchors.top: prev.bottom
-    anchors.bottom: parent.bottom
     margin-top: 5
     image-source: /images/ui/t2pixel-up-frame-borderimage
     image-border: 30
@@ -689,13 +688,12 @@ Panel
 
       Label
         id: gemInfo0
+        size: 135 32
         anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
+        anchors.horizontalCenter: parent.horizontalCenter
         margin-top: 60
-        margin-left: 2
-        margin-right: 2
-        height: 32
+        margin-left: 19
+        margin-right: 20
         !text: tr('Lesser Gem (x 0)')
         text-wrap: true
         text-align: center
@@ -771,13 +769,12 @@ Panel
 
       Label
         id: gemInfo1
+        size: 135 32
         anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
+        anchors.horizontalCenter: parent.horizontalCenter
         margin-top: 60
-        margin-left: 2
-        margin-right: 2
-        height: 32
+        margin-left: 19
+        margin-right: 20
         !text: tr('Lesser Gem (x 0)')
         text-wrap: true
         text-align: center
@@ -853,13 +850,12 @@ Panel
 
       Label
         id: gemInfo2
+        size: 135 32
         anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
+        anchors.horizontalCenter: parent.horizontalCenter
         margin-top: 60
-        margin-left: 2
-        margin-right: 2
-        height: 32
+        margin-left: 19
+        margin-right: 20
         !text: tr('Lesser Gem (x 0)')
         text-wrap: true
         text-align: center
