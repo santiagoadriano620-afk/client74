@@ -205,7 +205,7 @@ Panel
         font: Verdana Bold-11px
         color: #c0c0c0
         text: Dodge
-        text-allign: center
+        text-align: center
 
       UIWidget
         id: modBg3
@@ -391,6 +391,7 @@ Panel
           id: modBgAnim0
           anchors.fill: parent
           image-source: /images/game/wheel/backdrop_grades_circle_bottom_anim
+          visible: false
         UIWidget
           id: fragmentType0
           size: 50 50

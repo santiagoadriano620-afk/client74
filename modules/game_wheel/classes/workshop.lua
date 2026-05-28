@@ -284,11 +284,24 @@ function Workshop.onSelectChild(list, selected)
 		if backDrop.setShader then
 			backDrop:setShader(isActive and '' or 'image_black_white')
 		end
+		backDrop:setVisible(true)
         gradeWidget:setColor(isActive and activeColor or inactiveColor)
         bonusWidget:setColor(isActive and activeColor or inactiveColor)
-        backMidle:setVisible(isActive)
+        -- OTCv8 Classic renders the green animation layer above the medallion on
+        -- some builds. Keep the official grade medallions visible and use the
+        -- animation only for the current enhance target.
+        backMidle:setVisible(isActive and i == maxTier and maxTier < 3)
         if backLine then
             backLine:setVisible(isActive)
+        end
+        if backDrop.raise then
+            backDrop:raise()
+        end
+        if basicWidget.raise then
+            basicWidget:raise()
+        end
+        if supremeWidget.raise then
+            supremeWidget:raise()
         end
 
         bonusWidget:setText(Workshop.getSideBonusDescription(selected.cache, i))
