@@ -1,7 +1,6 @@
 PerksPanel < Panel
   height: 16
-  anchors.left: parent.left
-  anchors.right: parent.right
+  width: 191
   Label
     id: perk
     !text: tr('Healing Link')
@@ -35,8 +34,7 @@ PerksPanel < Panel
 
 PresetLabel < Panel
   height: 16
-  anchors.left: parent.left
-  anchors.right: parent.right
+  width: 207
   background-color: #484848
 
   $focus:
