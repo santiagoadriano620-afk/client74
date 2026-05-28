@@ -3423,7 +3423,7 @@ function WheelOfDestiny.onGemVesselClick(domain)
     wheelOfDestinyWindow.selection.gemContent.VRBonus:setColoredText(text)
 
 
-    local replaceStr = {[0] = "�", [1] = "�", [2] = "�", [3] = "�"}
+    local replaceStr = {[0] = "\255", [1] = "\255", [2] = "\255", [3] = "\255"}
     local coloredStr = {}
     setStringColor(coloredStr, formatedName .. " ", "#c0c0c0")
     if data then
