@@ -58,6 +58,19 @@ OptionPanel
     margin-top: 8
 
     OptionCheckBox
+      id: showInfoBanner
+      !text: tr('Show info banners')
+      !tooltip: tr('Display level up and skill up banners')
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.top: parent.top
+      margin: 5
+
+  FlatPanel
+    height: 22
+    margin-top: 8
+
+    OptionCheckBox
       id: displayNames
       !text: tr('Display creature names')
       anchors.left: parent.left

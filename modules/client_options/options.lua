@@ -4,6 +4,7 @@ local defaultOptions = {
 	dontStretchShrink = false,
 	fullscreen = false,
 	showPing = true,
+	showInfoBanner = true,
 	showFps = true,
 	hdmodeBox = true,
 	vsync = true,

@@ -1,0 +1,12 @@
+Module
+  name: game_notifications
+  description: Handles in-game notifications
+  author: game_notifications
+  website: https://github.com/mehah/otclient
+  sandboxed: true
+  autoload: true
+  autoload-priority: 1003
+  dependencies: [ modulelib, client_options, game_interface ]
+  scripts: [ game_notifications, controllers/infobanner ]
+  @onLoad: notificationsController:init()
+  @onUnload: notificationsController:terminate()
