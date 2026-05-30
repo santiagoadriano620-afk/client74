@@ -3810,7 +3810,7 @@ ItemPtr ProtocolGame::getItem(const InputMessagePtr& msg, int id, bool hasDescri
         msg->getU8(); // mark
     }
 
-    if (item->isStackable() || item->isChargeable()) {
+    if (item->isStackable() || item->isChargeable() || item->isQuiver()) {
         item->setCountOrSubType(g_game.getFeature(Otc::GameCountU16) ? msg->getU16() : msg->getU8());
     }
     else if (item->isFluidContainer() || item->isSplash()) {
