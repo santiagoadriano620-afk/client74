@@ -229,5 +229,9 @@ function updateFeatures(version)
       g_game.enableFeature(GameTibia12Protocol)
     end
 
+    if(version >= 860) then
+      g_game.enableFeature(GameProficiency)
+    end
+
     modules.game_things.load()
 end
