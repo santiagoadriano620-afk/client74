@@ -31,10 +31,11 @@ void RmlUiManager::init()
 
     m_renderInterface = new RmlUiRenderInterface();
     m_systemInterface = new RmlUiSystemInterface();
+    m_fileInterface = new RmlUiFileInterface();
 
     Rml::SetRenderInterface(m_renderInterface);
     Rml::SetSystemInterface(m_systemInterface);
-    Rml::SetFileInterface(new RmlUiFileInterface());
+    Rml::SetFileInterface(m_fileInterface);
 
     Rml::Initialise();
 
@@ -59,6 +60,9 @@ void RmlUiManager::terminate()
 
     delete m_renderInterface;
     m_renderInterface = nullptr;
+
+    delete m_fileInterface;
+    m_fileInterface = nullptr;
 
     m_initialized = false;
     g_logger.info("[RmlUi] Terminated");
