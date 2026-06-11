@@ -203,25 +203,9 @@ notificationsController.event = nil
 notificationsController.state = "idle"
 notificationsController.queue = {}
 notificationsController.widgets = {}
-notificationsController.lastReceivedLevels = {}
 -- Track recently received skill events to avoid enqueuing duplicates
 notificationsController.lastReceivedSkills = {}
 notificationsController.lastShownSkills = {}
-
-function showLevelUpBanner(level)
-    if notificationsController then
-        notificationsController:showLevelUp(level)
-    end
-end
-
-function notificationsController:showLevelUp(level)
-    level = tonumber(level)
-    if not level or level <= 0 then
-        return
-    end
-
-    self:onClientEvent(eventCategory.CLIENT_EVENT_TYPE_LEVEL, level)
-end
 
 function notificationsController:onClientEvent(eventCat, ...)
     if modules.client_options and modules.client_options.getOption and modules.client_options.getOption("showInfoBanner") == false then
@@ -229,27 +213,6 @@ function notificationsController:onClientEvent(eventCat, ...)
         return
     end
     local args = {...}
-    if eventCat == eventCategory.CLIENT_EVENT_TYPE_LEVEL then
-        local level = tonumber(args[1])
-        if not level then
-            return
-        end
-
-        local player = g_game.getLocalPlayer()
-        local key = player and player:getName() or "_default"
-        notificationsController.lastReceivedLevels = notificationsController.lastReceivedLevels or {}
-        if notificationsController.lastReceivedLevels[key] == level then
-            return
-        end
-
-        notificationsController.lastReceivedLevels[key] = level
-        scheduleEvent(function()
-            if notificationsController and notificationsController.lastReceivedLevels and notificationsController.lastReceivedLevels[key] == level then
-                notificationsController.lastReceivedLevels[key] = nil
-            end
-        end, 3000)
-    end
-
     -- Prevent duplicate skill notifications when identical events arrive
     -- in quick succession (e.g., both LocalPlayer and g_game emitting the same).
     if eventCat == eventCategory.CLIENT_EVENT_TYPE_SKILL then

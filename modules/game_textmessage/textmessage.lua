@@ -245,20 +245,8 @@ function displayFailureMessage(text)
 	displayMessage(MessageModes.Failure, text)
 end
 
-local function notifyLevelUpBanner(text)
-	local level = text:match("^You advanced from Level %d+ to Level (%d+)%.?$")
-	if not level then
-		return
-	end
-
-	if modules.game_notifications and modules.game_notifications.showLevelUpBanner then
-		modules.game_notifications.showLevelUpBanner(tonumber(level))
-	end
-end
-
 function displayGameMessage(text)
 	displayMessage(MessageModes.Game, text)
-	notifyLevelUpBanner(text)
 end
 
 function displayBroadcastMessage(text)
