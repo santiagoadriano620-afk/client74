@@ -16,7 +16,7 @@ Services = {
 Server = {
     host = '127.0.0.1',
     name = "Tibia Otcv8",
-    port = 7171,
+    port = 7169,
     protocol = 860,
 }
 
