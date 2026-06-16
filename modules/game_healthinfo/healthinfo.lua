@@ -89,7 +89,6 @@ healthInfoWindow = nil
 healthBar = nil
 manaBar = nil
 experienceBar = nil
-soulLabel = nil
 capLabel = nil
 healthTooltip = "Your character health is %d out of %d."
 manaTooltip = "Your character mana is %d out of %d."
@@ -108,7 +107,6 @@ function init()
 		onManaChange = onManaChange,
 		onLevelChange = onLevelChange,
 		onStatesChange = onStatesChange,
-		onSoulChange = onSoulChange,
 		onFreeCapacityChange = onFreeCapacityChange
 	})
 	connect(g_game, {
@@ -132,7 +130,6 @@ function init()
 	healthBar = healthInfoWindow:recursiveGetChildById("healthBar")
 	manaBar = healthInfoWindow:recursiveGetChildById("manaBar")
 	experienceBar = healthInfoWindow:recursiveGetChildById("experienceBar")
-	soulLabel = healthInfoWindow:recursiveGetChildById("soulLabel")
 	capLabel = healthInfoWindow:recursiveGetChildById("capLabel")
 	overlay = g_ui.createWidget("HealthOverlay", modules.game_interface.getMapPanel())
 	healthCircleFront = overlay:getChildById("healthCircleFront")
@@ -157,7 +154,6 @@ function init()
 		onManaChange(localPlayer, localPlayer:getMana(), localPlayer:getMaxMana())
 		onLevelChange(localPlayer, localPlayer:getLevel(), localPlayer:getLevelPercent())
 		onStatesChange(localPlayer, localPlayer:getStates(), 0)
-		onSoulChange(localPlayer, localPlayer:getSoul())
 		onFreeCapacityChange(localPlayer, localPlayer:getFreeCapacity())
 	end
 
@@ -179,7 +175,6 @@ function terminate()
 		onManaChange = onManaChange,
 		onLevelChange = onLevelChange,
 		onStatesChange = onStatesChange,
-		onSoulChange = onSoulChange,
 		onFreeCapacityChange = onFreeCapacityChange
 	})
 	disconnect(g_game, {
@@ -244,21 +239,7 @@ function onMiniWindowClose()
 	end
 end
 
-local function shouldForceFullHpMpLabels()
-	return g_settings.getBoolean("displayFullHpMpPercent")
-end
-
 local function getDisplayedResourceText(value, maxValue)
-	if shouldForceFullHpMpLabels() then
-		if maxValue and maxValue > 0 then
-			local percent = math.floor((value * 100) / maxValue)
-			percent = math.max(0, math.min(100, percent))
-			return percent .. "%"
-		end
-
-		return "0%"
-	end
-
 	return tostring(value)
 end
 
@@ -346,10 +327,6 @@ function onLevelChange(localPlayer, value, percent)
 	experienceBar:setPercent(percent)
 end
 
-function onSoulChange(localPlayer, soul)
-	soulLabel:setText(tr("Soul") .. ": " .. soul)
-end
-
 function onFreeCapacityChange(player, freeCapacity)
 	capLabel:setText(tr("Cap") .. ": " .. freeCapacity)
 end
@@ -378,10 +355,9 @@ end
 
 function hideLabels()
 	local content = healthInfoWindow:recursiveGetChildById("conditionPanel")
-	local removeHeight = math.max(capLabel:getMarginRect().height, soulLabel:getMarginRect().height) + content:getMarginRect().height - 3
+	local removeHeight = capLabel:getMarginRect().height + content:getMarginRect().height - 3
 
 	capLabel:setOn(false)
-	soulLabel:setOn(false)
 	content:setVisible(false)
 	healthInfoWindow:setHeight(math.max(healthInfoWindow.minimizedHeight, healthInfoWindow:getHeight() - removeHeight))
 end

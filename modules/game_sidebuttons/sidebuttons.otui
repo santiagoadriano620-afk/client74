@@ -1,5 +1,5 @@
 NonClosableMiniWindow
-  height: 103
+  height: 85
   id: sideButtonsWindow
   @onClose: modules.game_sidebuttons.onMiniWindowClose()
   &save: true
@@ -14,27 +14,10 @@ NonClosableMiniWindow
       margin-left: 12
 
     UIWidget
-      id: storeButton
-      image-source: buttons/store
-      anchors.left: parent.left
-      anchors.top: parent.top
-      margin-left: 5
-      margin-top: 0
-      size: 108 20
-      image-clip: 0 0 108 20
-      @onClick: if modules.game_store then modules.game_store.toggle() end
-
-      $pressed:
-        image-clip: 0 20 108 20
-
-      $checked:
-        image-clip: 0 20 108 20
-
-    UIWidget
       id: skillsButton
       image-source: buttons/skills
       anchors.left: parent.left
-      anchors.top: storeButton.bottom
+      anchors.top: parent.top
       margin-left: 5
       margin-top: 5
       size: 20 20
@@ -304,6 +287,26 @@ NonClosableMiniWindow
         image-clip: 20 0 20 20
 
     UIWidget
+      id: storeButton
+      image-source: buttons/store
+      anchors.left: proficiencyButton.right
+      anchors.top: forgeButton.top
+      margin-left: 3
+      size: 20 20
+      image-clip: 0 0 20 20
+      tooltip: Store
+      @onClick: if modules.game_store then modules.game_store.toggle() end
+
+      $pressed:
+        image-clip: 20 0 20 20
+
+      $on:
+        image-clip: 20 0 20 20
+
+      $checked:
+        image-clip: 20 0 20 20
+
+    UIWidget
       id: fullButtons
       image-source: buttons/fullButtons
       anchors.right: parent.right
@@ -355,13 +358,4 @@ NonClosableMiniWindow
       $checked:
         image-clip: 20 0 20 20
 
-    Button
-      id: stopButton
-      !text: tr('Stop')
-      anchors.right: parent.right
-      anchors.top: skillsButton.bottom
-      margin-top: 8
-      margin-right: 2
-      width: 43
-      height: 13
-      @onClick: function() g_game.cancelAttackAndFollow() end
+

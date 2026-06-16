@@ -153,8 +153,8 @@ UIWidget
     margin-right: 1
     relative-margin: bottom
     margin-bottom: 150
-    @canUpdateMargin: function(self, newMargin) if modules.client_options.getOption('dontStretchShrink') then return self:getMarginBottom() end return math.max(math.min(newMargin, self:getParent():getHeight() - 450), modules.game_actionbar.getBottomPanelHeight() + 137) end
-    @onGeometryChange: function(self) self:setMarginBottom(math.min(math.max(self:getParent():getHeight() - 450, modules.game_actionbar.getBottomPanelHeight() + 137), self:getMarginBottom())) end
+    @canUpdateMargin: function(self, newMargin) if modules.client_options.getOption('dontStretchShrink') then return self:getMarginBottom() end return math.max(math.min(newMargin, self:getParent():getHeight() - 450), 137) end
+    @onGeometryChange: function(self) self:setMarginBottom(math.min(math.max(self:getParent():getHeight() - 450, 137), self:getMarginBottom())) end
     
     $mobile:
       visible: false

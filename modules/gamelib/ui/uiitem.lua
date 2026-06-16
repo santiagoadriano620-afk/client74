@@ -7,6 +7,7 @@ function UIItem:onDragEnter(mousePos)
   self:setBorderWidth(1)
   self.currentDragThing = item
   g_mouse.pushCursor('target')
+  modules.game_interface.createGhostItem(item, mousePos)
   return true
 end
 
@@ -15,11 +16,16 @@ function UIItem:onDragLeave(droppedWidget, mousePos)
   if modules.game_supplystash and modules.game_supplystash.handleItemDragLeave then
     modules.game_supplystash.handleItemDragLeave(self, droppedWidget, mousePos)
   end
-  self.currentDragThing = nil
   g_mouse.popCursor('target')
   self:setBorderWidth(0)
   self.hoveredWho = nil
+  modules.game_interface.destroyGhostItem()
   return true
+end
+
+function UIItem:onDragMove(mousePos, mouseMoved)
+  modules.game_interface.moveGhostItem(mousePos)
+  return false
 end
 
 function UIItem:onDrop(widget, mousePos, forced)
@@ -66,6 +72,12 @@ function UIItem:onDestroy()
 
   if self.hoveredWho then
     self.hoveredWho = nil
+  end
+
+  if self.currentDragThing then
+    g_mouse.popCursor('target')
+    modules.game_interface.destroyGhostItem()
+    self.currentDragThing = nil
   end
 end
 

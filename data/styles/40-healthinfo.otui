@@ -7,23 +7,6 @@ ExperienceBar < ProgressBar
   margin: 1
   margin-top: 3
 
-SoulLabel < GameLabel
-  id: soulLabel
-  text-align: right
-  color: white
-  font: verdana-11px-rounded
-  anchors.bottom: parent.bottom
-  anchors.right: parent.right
-  anchors.left: parent.horizontalCenter
-  margin-top: 5
-  margin-right: 3
-  on: true
-
-  $!on:
-    visible: false
-    margin-top: 0
-    height: 0
-
 CapLabel < GameLabel
   id: capLabel
   color: white

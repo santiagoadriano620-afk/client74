@@ -403,7 +403,12 @@ ImagePtr SpriteManager::upscaleSprite(const ImagePtr& sprite, int scaleFactor) c
     }
 
     std::vector<uint32_t> targetPixels(targetWidth * targetHeight);
-    xbrz::scale(scaleFactor, sourcePixels.data(), targetPixels.data(), sourceWidth, sourceHeight, xbrz::ColorFormat::ARGB);
+    xbrz::ScalerCfg cfg;
+    cfg.luminanceWeight = 1.5;
+    cfg.equalColorTolerance = 10;
+    cfg.dominantDirectionThreshold = 1.5;
+    cfg.steepDirectionThreshold = 1.1;
+    xbrz::scale(scaleFactor, sourcePixels.data(), targetPixels.data(), sourceWidth, sourceHeight, xbrz::ColorFormat::ARGB, cfg);
 
     auto upscaledImage = std::make_shared<Image>(Size(targetWidth, targetHeight));
     std::vector<uint8>& targetData = upscaledImage->getPixels();

@@ -10,7 +10,7 @@ local defaultOptions = {
 	botSoundVolume = 0,
 	floorFading = 100,
 	crosshair = 1,
-	ambientLight = 50,
+	ambientLight = 0,
 	optimizationLevel = 1,
 	musicSoundVolume = 0,
 	displayHealth = true,
@@ -40,7 +40,6 @@ local defaultOptions = {
 	hotkeyDelay = 30,
 	turnDelay = 100,
 	displayText = true,
-	displayFullHpMpPercent = false,
 	topHealtManaBar = false,
 	hidePlayerBars = true,
 	enableMusicSound = false,
@@ -56,7 +55,6 @@ local defaultOptions = {
 	showInfoMessagesInConsole = true,
 	showEventMessagesInConsole = true,
 	showStatusMessagesInConsole = true,
-	autoChaseOverride = true,
 	dash = false,
 	smartWalk = false,
 	layout = DEFAULT_LAYOUT,
@@ -139,19 +137,15 @@ function init()
 
 	subWindows.general = createSubWindow("generalWindow", tr("General Options"), "game", {
 		width = 250,
-		height = 380
+		height = 340
 	})
 	subWindows.graphics = createSubWindow("graphicsWindow", tr("Graphics"), "graphics", {
 		width = 270,
-		height = 470
+		height = 340
 	})
 	subWindows.console = createSubWindow("consoleWindow", tr("Console"), "console", {
 		width = 320,
 		height = 280
-	})
-	subWindows.actionbars = createSubWindow("actionbarsWindow", tr("Actionbars"), "custom", {
-		width = 300,
-		height = 290
 	})
 
 	g_keyboard.bindKeyDown("Ctrl+Shift+F", function ()
@@ -353,6 +347,21 @@ function setOption(key, value, force)
 
 	if key == "vsync" then
 		g_window.setVerticalSync(value)
+
+		if value then
+			g_app.setMaxFps(0)
+		else
+			local fps = g_settings.getNumber("backgroundFrameRate")
+			g_app.setMaxFps(fps >= 240 and 0 or fps)
+		end
+
+		for _, win in pairs(subWindows) do
+			local sbar = win:recursiveGetChildById("backgroundFrameRate")
+
+			if sbar then
+				sbar:setEnabled(not value)
+			end
+		end
 	elseif key == "showFps" then
 		modules.client_topmenu.setFpsVisible(value)
 	elseif key == "showPing" then
@@ -397,18 +406,20 @@ function setOption(key, value, force)
 		local text = value
 		local v = value
 
-		if value <= 0 or value >= 201 then
+		if value <= 0 or value >= 240 then
 			text = "max"
 			v = 0
 		end
 
-		g_app.setMaxFps(v)
+		if not g_settings.getBoolean("vsync") then
+			g_app.setMaxFps(v)
+		end
 
 		for _, win in pairs(subWindows) do
-			local label = win:recursiveGetChildById("backgroundFrameRateLabel")
+			local label = win:recursiveGetChildById("fpsLabel")
 
 			if label then
-				label:setText(tr("Adjust framerate limit: %s", text))
+				label:setText(tr("FPS limit: %s", text))
 			end
 		end
 	elseif key == "crosshair" then
@@ -436,10 +447,6 @@ function setOption(key, value, force)
 		gameMapPanel:setDrawHealthBarsOnTop(value)
 	elseif key == "displayText" then
 		gameMapPanel:setDrawTexts(value)
-	elseif key == "displayFullHpMpPercent" then
-		if modules.game_healthinfo and modules.game_healthinfo.refreshHealthManaDisplay then
-			modules.game_healthinfo.refreshHealthManaDisplay()
-		end
 	elseif key == "dash" then
 		g_game.setMaxPreWalkingSteps(2)
 	elseif key == "wsadWalking" then
@@ -450,7 +457,7 @@ function setOption(key, value, force)
 		g_app.setSmooth(value)
 	elseif key == "hdmodeBox" then
 		if g_sprites and g_sprites.setScaleFactor then
-			g_sprites.setScaleFactor(value and 2 or 1)
+			g_sprites.setScaleFactor(value and 4 or 1)
 		end
 	end
 
@@ -482,10 +489,6 @@ function setOption(key, value, force)
 
 	if key == "classicView" or key == "rightPanels" or key == "leftPanels" or key == "cacheMap" or key == "hdmodeBox" then
 		modules.game_interface.refreshViewMode()
-	elseif key:find("actionbar") then
-		if modules.game_actionbar then
-			modules.game_actionbar.refresh()
-		end
 	end
 end
 
@@ -498,25 +501,8 @@ function getOption(key)
 end
 
 function online()
-	setLightOptionsVisibility(not g_game.getFeature(GameForceLight))
 	g_app.setSmooth(g_settings.getBoolean("antialiasing"))
 end
 
 function offline()
-	setLightOptionsVisibility(true)
-end
-
-function setLightOptionsVisibility(value)
-	if subWindows.graphics then
-		local lbl = subWindows.graphics:recursiveGetChildById("ambientLightLabel")
-		local pnl = subWindows.graphics:recursiveGetChildById("ambientLight")
-
-		if lbl then
-			lbl:setEnabled(value)
-		end
-
-		if pnl then
-			pnl:setEnabled(value)
-		end
-	end
 end

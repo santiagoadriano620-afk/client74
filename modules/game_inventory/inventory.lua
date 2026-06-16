@@ -149,7 +149,6 @@ skillsButton = nil
 battleButton = nil
 vipButton = nil
 questButton = nil
-soulLabel = nil
 capLabel = nil
 conditionPanel = nil
 
@@ -243,13 +242,11 @@ function init()
         online()
     end
 
-    soulLabel = inventoryWindow:recursiveGetChildById("soulLabel")
     capLabel = inventoryWindow:recursiveGetChildById("capLabel")
     conditionPanel = inventoryWindow:recursiveGetChildById("conditionPanel")
 
     connect(LocalPlayer, {
         onStatesChange = onStatesChange,
-        onSoulChange = onSoulChange,
         onFreeCapacityChange = onFreeCapacityChange
     })
     connect(LocalPlayer, {
@@ -276,7 +273,6 @@ function toggleInventoryMinimize(state)
     local controlsPanel = contentsPanel:getChildById("inventoryControlsPanel")
     local minimizeButton = contentsPanel:getChildById("minimizeButton")
     local capLabel = contentsPanel:getChildById("capLabel")
-    local soulLabel = contentsPanel:getChildById("soulLabel")
     local conditionPanel = contentsPanel:getChildById("conditionPanel")
 
     -- Utility buttons
@@ -313,16 +309,11 @@ function toggleInventoryMinimize(state)
         inventoryWindow:setHeight(62)
         inventoryWindow:setWidth(155)
 
-        -- Cap and Soul placement (stacked)
+        -- Cap placement
         capLabel:addAnchor(AnchorTop, 'parent', AnchorTop)
         capLabel:addAnchor(AnchorLeft, 'parent', AnchorLeft)
         capLabel:setMarginTop(5)
         capLabel:setMarginLeft(25)
-
-        soulLabel:addAnchor(AnchorTop, 'parent', AnchorTop)
-        soulLabel:addAnchor(AnchorLeft, 'parent', AnchorLeft)
-        soulLabel:setMarginTop(25)
-        soulLabel:setMarginLeft(25)
 
         -- Controls Panel layout (Grid 3x2)
         controlsPanel:addAnchor(AnchorTop, 'parent', AnchorTop)
@@ -368,8 +359,8 @@ function toggleInventoryMinimize(state)
         conditionPanel:addAnchor(AnchorTop, 'chaseModeBoxStand', AnchorBottom)
         conditionPanel:addAnchor(AnchorHorizontalCenter, 'controlsPanel', AnchorHorizontalCenter)
         conditionPanel:setMarginTop(10)
-        conditionPanel:setWidth(120)
-        conditionPanel:setHeight(13)
+        conditionPanel:setWidth(34)
+        conditionPanel:setHeight(20)
         conditionPanel:setMarginLeft(0)
 
         minimizeButton:setImageClip("14 0 14 14") -- "+" icon
@@ -390,16 +381,11 @@ function toggleInventoryMinimize(state)
         inventoryWindow:setHeight(170)
         inventoryWindow:setWidth(170)
 
-        -- Cap and Soul restoration
+        -- Cap restoration
         capLabel:addAnchor(AnchorTop, 'inventorySlotsPanel', AnchorTop)
         capLabel:addAnchor(AnchorLeft, 'inventorySlotsPanel', AnchorLeft)
         capLabel:setMarginTop(130)
         capLabel:setMarginLeft(80)
-
-        soulLabel:addAnchor(AnchorTop, 'inventorySlotsPanel', AnchorTop)
-        soulLabel:addAnchor(AnchorLeft, 'inventorySlotsPanel', AnchorLeft)
-        soulLabel:setMarginTop(130)
-        soulLabel:setMarginLeft(5)
 
         conditionPanel:removeAnchor(AnchorTop)
         conditionPanel:removeAnchor(AnchorBottom)
@@ -407,11 +393,11 @@ function toggleInventoryMinimize(state)
         conditionPanel:removeAnchor(AnchorRight)
         conditionPanel:removeAnchor(AnchorHorizontalCenter)
         conditionPanel:addAnchor(AnchorTop, 'inventorySlotsPanel', AnchorTop)
-        conditionPanel:addAnchor(AnchorHorizontalCenter, 'inventorySlotsPanel', AnchorHorizontalCenter)
-        conditionPanel:setMarginTop(150)
-        conditionPanel:setWidth(110)
-        conditionPanel:setHeight(13)
-        conditionPanel:setMarginLeft(0)
+        conditionPanel:addAnchor(AnchorLeft, 'inventorySlotsPanel', AnchorLeft)
+        conditionPanel:setMarginTop(130)
+        conditionPanel:setWidth(34)
+        conditionPanel:setHeight(20)
+        conditionPanel:setMarginLeft(5)
 
 
         -- Controls panel restoration
@@ -510,7 +496,6 @@ function terminate()
     })
     disconnect(LocalPlayer, {
         onStatesChange = onStatesChange,
-        onSoulChange = onSoulChange,
         onFreeCapacityChange = onFreeCapacityChange
     })
     disconnect(LocalPlayer, {
@@ -549,7 +534,6 @@ function refresh()
     end
 
     if player then
-        onSoulChange(player, player:getSoul())
         onFreeCapacityChange(player, player:getFreeCapacity())
         onStatesChange(player, player:getStates(), 0)
     end
@@ -653,12 +637,6 @@ function update()
     end
 end
 
-
-function check()
-    if modules.client_options.getOption("autoChaseOverride") and g_game.isAttacking() and g_game.getChaseMode() == ChaseOpponent then
-        g_game.setChaseMode(DontChase)
-    end
-end
 
 
 function online()
@@ -859,15 +837,6 @@ function loadIcon(bitChanged)
     icon:setTooltip(Icons[bitChanged].tooltip)
 
     return icon
-end
-
-
-function onSoulChange(localPlayer, soul)
-    if not soul then
-        return
-    end
-
-    soulLabel:setText(tr("Soul") .. ":\n" .. soul)
 end
 
 

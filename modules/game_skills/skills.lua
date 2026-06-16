@@ -74,7 +74,6 @@ function init()
 		onLevelChange = onLevelChange,
 		onHealthChange = onHealthChange,
 		onManaChange = onManaChange,
-		onSoulChange = onSoulChange,
 		onFreeCapacityChange = onFreeCapacityChange,
 		onTotalCapacityChange = onTotalCapacityChange,
 		onStaminaChange = onStaminaChange,
@@ -111,7 +110,6 @@ function terminate()
 		onLevelChange = onLevelChange,
 		onHealthChange = onHealthChange,
 		onManaChange = onManaChange,
-		onSoulChange = onSoulChange,
 		onFreeCapacityChange = onFreeCapacityChange,
 		onTotalCapacityChange = onTotalCapacityChange,
 		onStaminaChange = onStaminaChange,
@@ -289,7 +287,6 @@ function refresh()
 	onLevelChange(player, player:getLevel(), player:getLevelPercent())
 	onHealthChange(player, player:getHealth(), player:getMaxHealth())
 	onManaChange(player, player:getMana(), player:getMaxMana())
-	onSoulChange(player, player:getSoul())
 	onFreeCapacityChange(player, player:getFreeCapacity())
 	onStaminaChange(player, player:getStamina())
 	onMagicLevelChange(player, player:getMagicLevel(), player:getMagicLevelPercent())
@@ -447,16 +444,7 @@ function formatExpNumber(value)
 end
 
 function formatLargeExp(value)
-	if value >= 1000000 then 
-		-- Always format as M if it's over 1 Million, e.g. 4,485 M instead of 4 B
-		local mill = math.floor(value / 1000000)
-		return comma_value(mill) .. " M"
-	elseif value >= 1000 then 
-		local thou = math.floor(value / 1000)
-		return comma_value(thou) .. " K"
-	else
-		return comma_value(value)
-	end
+	return comma_value(value):gsub(",", ".")
 end
 
 function onExperienceChange(localPlayer, value)
@@ -489,10 +477,6 @@ end
 function onManaChange(localPlayer, mana, maxMana)
 	setSkillValue("mana", mana)
 	checkAlert("mana", mana, maxMana, 30)
-end
-
-function onSoulChange(localPlayer, soul)
-	setSkillValue("soul", soul)
 end
 
 function onFreeCapacityChange(localPlayer, freeCapacity)

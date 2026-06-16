@@ -16,18 +16,6 @@ OptionPanel
     margin-top: 8
 
     OptionCheckBox
-      id: autoChaseOverride
-      !text: tr('Auto Chase Off')
-      anchors.left: parent.left
-      anchors.right: parent.right
-      anchors.top: parent.top
-      margin: 5
-
-  FlatPanel
-    height: 22
-    margin-top: 8
-
-    OptionCheckBox
       id: displayText
       !text: tr('Display text messages')
       anchors.left: parent.left
@@ -116,19 +104,6 @@ OptionPanel
       anchors.top: parent.top
       margin: 5
 
-  FlatPanel
-    height: 22
-    margin-top: 8
-
-    OptionCheckBox
-      id: displayFullHpMpPercent
-      !text: tr('Show HP/MP as percent')
-      !tooltip: tr('When enabled, HP/MP labels show current percent values')
-      anchors.left: parent.left
-      anchors.right: parent.right
-      anchors.top: parent.top
-      margin: 5
-      
   Panel
     height: 30
     margin-top: 10

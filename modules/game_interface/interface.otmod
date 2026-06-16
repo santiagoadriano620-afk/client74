@@ -33,7 +33,6 @@ Module
     - client_travel
     - client_textedit
     - client_profiles
-    - game_actionbar
     - game_stats
     - game_shaders
     - game_questlog

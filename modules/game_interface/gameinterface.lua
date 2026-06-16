@@ -1101,6 +1101,43 @@ function getRootPanel()
 	return gameRootPanel
 end
 
+-- Ghost item drag draw
+ghostItem = nil
+
+function lazyGhostItem()
+	if not ghostItem then
+		ghostItem = g_ui.createWidget("GhostItem", modules.game_interface.getRootPanel())
+		ghostItem:setOpacity(0.8)
+		ghostItem:setVisible(false)
+	end
+	return ghostItem
+end
+
+function createGhostItem(item, mousePos)
+	if not item or not item:isItem() then return end
+
+	local g = lazyGhostItem()
+	g:setItem(item)
+	g:setVisible(true)
+	g:raise()
+	moveGhostItem(mousePos)
+end
+
+function moveGhostItem(mousePos)
+	if not ghostItem then return end
+	ghostItem:setPosition({x = mousePos.x + 4, y = mousePos.y + 10})
+end
+
+function destroyGhostItem()
+	if ghostItem then
+		ghostItem:setVisible(false)
+	end
+end
+
+function getGhostItem()
+	return ghostItem
+end
+
 function getMapPanel()
 	return gameMapPanel
 end

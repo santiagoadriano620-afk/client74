@@ -120,7 +120,6 @@ end
 
 function collectiveReload()
 	modules.game_topbar.refresh(true)
-	modules.game_actionbar.refresh(true)
 end
 
 function load()

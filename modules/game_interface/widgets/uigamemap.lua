@@ -22,6 +22,12 @@ function UIGameMap:onDestroy()
 	if self.updateMarkedCreatureEvent then
 		removeEvent(self.updateMarkedCreatureEvent)
 	end
+
+	if self.currentDragThing then
+		g_mouse.popCursor('target')
+		modules.game_interface.destroyGhostItem()
+		self.currentDragThing = nil
+	end
 end
 
 function UIGameMap:markThing(thing, color)
@@ -62,20 +68,28 @@ function UIGameMap:onDragEnter(mousePos)
 		return false
 	end
 
+	if thing:isItem() and not thing:isPickupable() then
+		return false
+	end
+
 	self.currentDragThing = thing
 
 	g_mouse.pushCursor("target")
 
 	self.allowNextRelease = false
 
+	if thing:isItem() then
+		modules.game_interface.createGhostItem(thing, mousePos)
+	end
+
 	return true
 end
 
 function UIGameMap:onDragLeave(droppedWidget, mousePos)
-	self.currentDragThing = nil
 	self.hoveredWho = nil
 
 	g_mouse.popCursor("target")
+	modules.game_interface.destroyGhostItem()
 
 	return true
 end
@@ -120,7 +134,7 @@ end
 
 function UIGameMap:onDragMove(mousePos, mouseMoved)
 	self.mousePos = mousePos
-
+	modules.game_interface.moveGhostItem(mousePos)
 	return false
 end
 

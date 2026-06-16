@@ -37,11 +37,6 @@ OptionPanel
     $mobile:
       visible: false
 
-  OptionCheckBox
-    id: displayFullHpMpPercent
-    !text: tr('Show HP/MP as percent')
-    !tooltip: tr('When enabled, HP/MP labels show current percent values')
-
   Label
     margin-top: 5
     text: Show Bottom Action Bars:

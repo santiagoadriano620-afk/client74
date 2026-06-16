@@ -11,7 +11,7 @@ HotkeyListLabel < UILabel
 MainWindow
   id: hotkeysWindow
   !text: tr('Hotkeys Options')
-  size: 315 485
+  size: 315 290
 
   @onEnter: modules.game_hotkeys.ok()
   @onEscape: modules.game_hotkeys.cancel()
@@ -80,34 +80,6 @@ MainWindow
     margin-top: 8
     @onClick: modules.game_hotkeys.removeHotkey()
 
-  HorizontalSeparator
-    anchors.left: parent.left
-    anchors.right: parent.right
-    anchors.top: prev.bottom
-    margin-top: 5
-    
-  Label
-    anchors.left: parent.left
-    anchors.top: prev.bottom
-    margin-top: 10
-    !text: tr('Extra action:')    
-  
-  ComboBox
-    id: action
-    anchors.left: prev.right
-    anchors.right: parent.right
-    anchors.top: prev.top
-    margin-left: 5
-    margin-top: -4
-    enabled: false
-    @onOptionChange: modules.game_hotkeys.updateHotkeyAction()
-
-  HorizontalSeparator
-    anchors.left: parent.left
-    anchors.right: parent.right
-    anchors.top: prev.bottom
-    margin-top: 5
-
   Label
     id: hotKeyTextLabel
     !text: tr('Edit hotkey text:')
@@ -115,7 +87,7 @@ MainWindow
     anchors.left: parent.left
     anchors.right: parent.right
     anchors.top: prev.bottom
-    margin-top: 6
+    margin-top: 10
 
   TextEdit
     id: hotkeyText
@@ -126,106 +98,16 @@ MainWindow
     margin-top: 2
     @onTextChange: modules.game_hotkeys.onHotkeyTextChange(self:getText())
 
-  FlatPanel
-    id: sendAutoPanel
-    anchors.left: parent.left
-    anchors.right: parent.right
-    anchors.top: hotkeyText.bottom
-    height: 22
-    margin-top: 15
-
   CheckBox
     id: sendAutomatically
     !text: tr('Send automatically')
-    anchors.left: sendAutoPanel.left
-    anchors.right: sendAutoPanel.right
-    anchors.top: sendAutoPanel.top
-    enabled:false
-    margin-top: 5
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: hotkeyText.bottom
+    enabled: false
+    margin-top: 10
     margin-left: 5
     @onCheckChange: modules.game_hotkeys.onSendAutomaticallyChange(self:isChecked())
-
-  Label
-    !text: tr('Edit hotkey object:')
-    anchors.top: sendAutoPanel.bottom
-    anchors.left: sendAutoPanel.left
-    text-auto-resize: true
-    margin-top: 15
-
-  FlatPanel
-    id: itemPreviewBackground
-    anchors.left: parent.left
-    anchors.top: prev.bottom
-    margin-top: 2
-    size: 55 55
-
-    UIItem
-      id: itemPreview
-      anchors.fill: parent
-      margin: 3
-      virtual: true
-      background-color: alpha
-
-  LongButton
-    id: selectObjectButton
-    !text: tr('Select object')
-    width: 85
-    enabled: false
-    anchors.left: itemPreviewBackground.right
-    anchors.top: itemPreviewBackground.top
-    margin-left: 15
-    @onClick: modules.game_hotkeys.startChooseItem()
-
-  LongButton
-    id: clearObjectButton
-    !text: tr('Clear object')
-    width: 85
-    enabled: false
-    anchors.left: prev.left
-    anchors.right: prev.right
-    anchors.top: prev.bottom
-    margin-top: 15
-    @onClick: modules.game_hotkeys.clearObject()
-
-  LongButton
-    id: useOnSelf
-    !text: tr('Use on yourself')
-    enabled: false
-    anchors.left: selectObjectButton.right
-    anchors.right: parent.right
-    anchors.top: selectObjectButton.top
-    anchors.bottom: selectObjectButton.bottom
-    checked: false
-    margin-left: 15
-
-  LongButton
-    id: useOnTarget
-    !text: tr('Use on target')
-    height: 20
-    enabled: false
-    anchors.left: prev.left
-    anchors.right: prev.right
-    anchors.top: prev.bottom
-    checked: false
-    margin-top: 15
-
-  LongButton
-    id: useWith
-    !text: tr('With crosshair')
-    height: 20
-    enabled: false
-    anchors.left: prev.left
-    anchors.right: prev.right
-    anchors.top: prev.bottom
-    checked: false
-    margin-top: 15
-
-  HorizontalSeparator
-    id: separator
-    anchors.left: parent.left
-    anchors.right: parent.right
-    anchors.bottom: next.top
-    margin-bottom: 8
 
   LongButton
     id: okButton

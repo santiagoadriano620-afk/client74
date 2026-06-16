@@ -79,13 +79,6 @@ MiniWindow
       SkillValueLabel
 
     SkillButton
-      id: soul
-      height: 15
-      SkillNameLabel
-        !text: tr('Soul Points')
-      SkillValueLabel
-
-    SkillButton
       id: capacity
       height: 15
       SkillNameLabel

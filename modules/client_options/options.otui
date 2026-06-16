@@ -13,7 +13,7 @@ OptionPanel < Panel
 MainWindow
   id: optionsWindow
   !text: tr('Options')
-  size: 285 300
+  size: 285 200
   @onEscape: modules.client_options.hide()
 
   LongButton
@@ -51,30 +51,6 @@ MainWindow
     margin-top: 15
     @onClick: |
       modules.game_hotkeys.toggle()
-      modules.client_options.hide()
-
-  LongButton
-    id: ActionbarsButton
-    !text: tr('Actionbars')
-    width: 90
-    anchors.top: prev.bottom
-    anchors.left: parent.left
-    margin-top: 15
-    @onClick: modules.client_options.toggleSubWindow('actionbars')
-
-  LongButton
-    id: MotdButton
-    !text: tr('Motd')
-    width: 90
-    anchors.top: prev.bottom
-    anchors.left: parent.left
-    margin-top: 15
-    @onClick: |
-      if modules.motd and modules.motd.toggle then
-        modules.motd.toggle()
-      elseif modules.game_motd and modules.game_motd.toggle then
-        modules.game_motd.toggle()
-      end
       modules.client_options.hide()
 
   Label
@@ -121,41 +97,6 @@ MainWindow
     anchors.top: HotkeysButton.top
     anchors.left: HotkeysButton.left
     margin-left: 100
-
-  Label
-    id: ActionbarsButtonText
-    !text: tr('Customize your action bars')
-    anchors.top: ActionbarsButton.top
-    anchors.left: ActionbarsButton.left
-    margin-left: 100
-    @onClick: modules.client_options.toggleSubWindow('actionbars')
-
-  HorizontalSeparator
-    anchors.left: parent.left
-    anchors.right: parent.right
-    anchors.top: prev.bottom
-    margin-top: 20
-
-  Label
-    id: MotdButtonText
-    !text: tr('Show the most recent')
-    anchors.top: MotdButton.top
-    anchors.left: MotdButton.left
-    margin-left: 100
-    @onClick: modules.client_options.toggleSubWindow('motd')
-
-  Label
-    !text: tr('Message of the Day')
-    anchors.top: MotdButtonText.top
-    anchors.left: MotdButtonText.left
-    margin-top: 12
-    @onClick: modules.client_options.toggleSubWindow('motd')
-
-  HorizontalSeparator
-    anchors.left: parent.left
-    anchors.right: parent.right
-    anchors.top: prev.bottom
-    margin-top: 12
 
   Button
     id: closeButton

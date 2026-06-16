@@ -4,7 +4,7 @@ Module
   author: andrefaramir, BeniS
   website: https://github.com/edubart/otclient
   sandboxed: true
-  scripts: [ hotkeys_extra, hotkeys_manager ]
+  scripts: [ hotkeys_manager ]
   autoload: true
   autoload-priority: 1000
   dependencies: [ client_topmenu, game_interface ]

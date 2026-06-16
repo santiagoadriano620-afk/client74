@@ -7,3 +7,6 @@ data/things/860/Tibia.spr
 otclient_dx_x64.exe
 packet.log
 tibiaotcv8.log
+otclient_dx_x64.exp
+otclient_dx_x64.lib
+otclient_dx_x64.pdb
